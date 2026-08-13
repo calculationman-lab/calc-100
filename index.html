@@ -5,8 +5,8 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="100問計算">
 <link rel="apple-touch-icon" href="./icon-192.png">
 <style>
-*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
-main{min-height:100vh;display:grid;place-items:center;padding:20px}.card{width:min(700px,100%);background:white;border-radius:24px;padding:26px;box-shadow:0 10px 35px #0002}
+*{box-sizing:border-box}html,body{overscroll-behavior:none}body{margin:0;background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+body.lock{position:fixed;inset:0;overflow:hidden;touch-action:none}main{min-height:100dvh;display:grid;place-items:center;padding:20px}.card{width:min(700px,100%);background:white;border-radius:24px;padding:26px;box-shadow:0 10px 35px #0002}
 .top{display:flex;justify-content:space-between;align-items:center;color:#667085;font-weight:700}.pill{background:#eef2f6;border-radius:999px;padding:8px 13px}
 .problem{text-align:center;font-size:clamp(52px,13vw,96px);font-weight:850;margin:45px 0 25px;letter-spacing:.02em}
 input{width:100%;font-size:clamp(38px,10vw,64px);text-align:center;border:3px solid #d0d5dd;border-radius:18px;padding:13px;background:#fff}
@@ -22,9 +22,9 @@ h1{text-align:center}.today{text-align:center;color:#667085;margin-bottom:15px}.
 .keypad .enter{background:#17202a;color:#fff;font-size:20px}
 .keypad .erase{background:#dfe4ea}
 @media (min-width:700px){.keypad .key{padding:20px}}
-</style></head><body><main><section class="card">
-<div id="start"><h1>100問計算</h1><div class="today" id="date"></div>
-<p class="note">足し算50問＋引き算50問。<br>毎日、その日の100問をランダム生成します。</p><button id="startBtn">今日の100問をはじめる</button></div>
+@media(max-height:750px){.card{padding:14px}.problem{margin:12px 0;font-size:50px}.answerDisplay{min-height:58px;font-size:40px}.keypad .key{padding:10px}.hint{display:none}}</style></head><body><main><section class="card">
+<div id="start"><h1>100問計算</h1><div class="today" id="date"></div><div id="todayStatus" style="text-align:center;font-weight:800;padding:14px;border-radius:14px;background:#fff3e8;margin:12px 0"></div>
+<p class="note">足し算50問＋引き算50問。<br>毎日、その日の100問をランダム生成します。</p><button id="startBtn">今日の100問をはじめる</button><button id="historyBtn" class="secondary">過去の記録を見る</button></div>
 <div id="quiz" class="hidden"><div class="top"><span class="pill" id="progress"></span><span id="timer">0:00</span></div>
 <div class="problem" id="problem"></div><div id="answerDisplay" class="answerDisplay" aria-label="入力した答え">&nbsp;</div>
 <div class="keypad" aria-label="数字入力">
@@ -35,7 +35,7 @@ h1{text-align:center}.today{text-align:center;color:#667085;margin-bottom:15px}.
 </div><div class="hint">数字を押して「決定」</div></div>
 <div id="result" class="hidden"><h1>今日の結果</h1><div class="score" id="score"></div><div class="time" id="finalTime"></div>
 <div id="wrongList"></div><button id="retry" class="hidden">間違えた問題をもう一度</button><button id="newRun" class="secondary">もう一度100問</button></div>
-</section></main>
+<div id="history" class="hidden"><h1>過去の記録</h1><div id="historyList"></div><button id="historyBack" class="secondary">トップへ戻る</button></div></section></main>
 <script>
 const $=id=>document.getElementById(id); let qs=[],idx=0,wrong=[],startAt=0,tick=null,retryMode=false;
 function seedDate(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -47,7 +47,7 @@ function generate(extra=""){let r=rng(seedDate()+extra),a=[];let used=new Set();
  return shuffle(a,r)}
 function fmt(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+"分"+String(s%60).padStart(2,"0")+"秒"}
 function fmtShort(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
-function begin(list, retry=false){qs=list;idx=0;wrong=[];retryMode=retry;$("start").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");startAt=Date.now();clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmtShort(Date.now()-startAt),500);show()}
+function begin(list, retry=false){document.body.classList.add("lock");qs=list;idx=0;wrong=[];retryMode=retry;$("start").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");startAt=Date.now();clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmtShort(Date.now()-startAt),500);show()}
 let entered="";
 function paintAnswer(){$("answerDisplay").textContent=entered||"　"}
 function show(){if(idx>=qs.length)return finish();let q=qs[idx];$("progress").textContent=(idx+1)+" / "+qs.length;$("problem").textContent=q.x+" "+q.op+" "+q.y+" =";entered="";paintAnswer()}
@@ -57,18 +57,23 @@ function keypress(k){
  if(k==="enter"){submit();return}
  if(entered.length<3){entered+=k;paintAnswer()}
 }
-function finish(){clearInterval(tick);let elapsed=Date.now()-startAt;$("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+function finish(){document.body.classList.remove("lock");clearInterval(tick);let elapsed=Date.now()-startAt;$("quiz").classList.add("hidden");$("result").classList.remove("hidden");
  $("score").textContent=(qs.length-wrong.length)+" / "+qs.length+"点";$("finalTime").textContent="所要時間 "+fmt(elapsed);
  let wl=$("wrongList");wl.innerHTML=wrong.length?'<h2>間違えた問題</h2>':'<p class="note">全問正解！</p>';
  wrong.forEach(q=>{let div=document.createElement("div");div.className="wrong";div.innerHTML=`<span>${q.x} ${q.op} ${q.y} = <s>${q.given}</s></span><b>${q.ans}</b>`;wl.appendChild(div)});
  $("retry").classList.toggle("hidden",wrong.length===0);$("retry").textContent="間違えた"+wrong.length+"問をもう一度";
- if(!retryMode){let hist=JSON.parse(localStorage.getItem("calc100History")||"[]");hist.push({date:seedDate(),score:qs.length-wrong.length,total:qs.length,time:elapsed});localStorage.setItem("calc100History",JSON.stringify(hist.slice(-100)))}
+ if(!retryMode&&qs.length===100){let hist=JSON.parse(localStorage.getItem("calc100History")||"[]");hist.push({date:seedDate(),completedAt:new Date().toISOString(),score:qs.length-wrong.length,total:100,time:elapsed});localStorage.setItem("calc100History",JSON.stringify(hist.slice(-365)))}
 }
 $("date").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric"});
+
+function getHist(){return JSON.parse(localStorage.getItem("calc100History")||"[]")}
+function updateStatus(){let a=getHist().filter(x=>x.date===seedDate()&&x.total===100),s=$("todayStatus");if(a.length){let x=a[a.length-1];s.style.background="#edf8f0";s.innerHTML="今日の100問：完了<br>"+x.score+"/100点　"+fmt(x.time)}else{s.style.background="#fff3e8";s.textContent="今日の100問：まだ終わっていません"}}
+function showHistory(){["start","quiz","result"].forEach(x=>$(x).classList.add("hidden"));$("history").classList.remove("hidden");let a=getHist().slice().reverse(),el=$("historyList");el.innerHTML=a.length?"":"<p class='note'>まだ記録がありません。</p>";a.forEach(x=>{let d=x.completedAt?new Date(x.completedAt):new Date(x.date+"T00:00:00");let row=document.createElement("div");row.style.cssText="border-top:1px solid #e4e7ec;padding:12px 2px;font-size:18px";row.textContent=(d.getMonth()+1)+"/"+d.getDate()+"　"+x.score+"/"+x.total+"点　"+fmt(x.time);el.appendChild(row)})}
+function backHome(){document.body.classList.remove("lock");["quiz","result","history"].forEach(x=>$(x).classList.add("hidden"));$("start").classList.remove("hidden");updateStatus()}
 $("startBtn").onclick=()=>begin(generate());
 document.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>keypress(b.dataset.key)));
 document.addEventListener("keydown",e=>{if(/^[0-9]$/.test(e.key))keypress(e.key);else if(e.key==="Backspace")keypress("back");else if(e.key==="Enter")keypress("enter")});
 $("retry").onclick=()=>{let list=wrong.map(({given,...q})=>q);begin(shuffle(list),true)};
-$("newRun").onclick=()=>begin(generate(String(Date.now())));
+$("newRun").onclick=()=>begin(generate(String(Date.now())));$("historyBtn").onclick=showHistory;$("historyBack").onclick=backHome;updateStatus();
 if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
 </script></body></html>
