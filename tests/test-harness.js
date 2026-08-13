@@ -2,12 +2,13 @@ const fs = require("fs");
 const path = require("path");
 const vm = require("vm");
 
-function createHarness(initialValue = null) {
+function createHarness(initialValue = null, initialSettings = null) {
   const root = path.resolve(__dirname, "..");
   const html = fs.readFileSync(path.join(root, "index.html"), "utf8");
   const source = html.match(/<script>([\s\S]*)<\/script>/)[1];
   const store = new Map();
   if (initialValue !== null) store.set("calcRPG", typeof initialValue === "string" ? initialValue : JSON.stringify(initialValue));
+  if (initialSettings !== null) store.set("calcRPGSettings", typeof initialSettings === "string" ? initialSettings : JSON.stringify(initialSettings));
   const nodes = new Map();
   const timerStats = { started: 0, cleared: 0 };
   let confirmResult = true;
