@@ -92,17 +92,27 @@ const BOSSES=[
   {id:"azure_crystal_dragon",tier:3,name:"蒼晶のドラゴン",image:"./assets/bosses/boss_diamond.png"},
   {id:"nether_demon_king",tier:4,name:"冥界の魔王",image:"./assets/bosses/boss_nether.png"}
 ];
+const SOUND_PROFILES={
+  normalDigit:{attackGain:.10,bodyGain:.045,noiseGain:.035,attackHz:1050,bodyHz:420,duration:.052,noiseDuration:.025},
+  normalConfirm:{attackGain:.18,bodyGain:.11,noiseGain:.07,attackHz:1250,bodyHz:340,duration:.085,noiseDuration:.045},
+  bossDigit:{attackGain:.15,bodyGain:.09,noiseGain:.06,attackHz:900,bodyHz:300,duration:.065,noiseDuration:.035},
+  bossConfirm:{attackGain:.25,bodyGain:.16,noiseGain:.10,attackHz:1050,bodyHz:230,duration:.115,noiseDuration:.06},
+  backspace:{attackGain:.085,bodyGain:0,noiseGain:0,attackHz:230,bodyHz:0,duration:.04,noiseDuration:0}
+};
 class SoundManager{
-  constructor(){this.context=null;this.enabled=this.load().soundEnabled;this.createdContexts=0}
+  constructor(){this.context=null;this.masterGain=null;this.compressor=null;this.noiseBuffer=null;this.enabled=this.load().soundEnabled;this.createdContexts=0}
   load(){try{const value=JSON.parse(localStorage.getItem("calcRPGSettings")||"{}");return{soundEnabled:value.soundEnabled!==false}}catch(e){return{soundEnabled:true}}}
   save(){try{localStorage.setItem("calcRPGSettings",JSON.stringify({soundEnabled:this.enabled}))}catch(e){}}
   setEnabled(value){this.enabled=Boolean(value);this.save();if(this.enabled)this.resume();return this.enabled}
   toggle(){return this.setEnabled(!this.enabled)}
-  resume(){if(!this.enabled)return null;try{const AudioCtor=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AudioCtor)return null;if(!this.context){this.context=new AudioCtor();this.createdContexts++}if(this.context.state==="suspended")this.context.resume().catch(()=>{});return this.context}catch(e){return null}}
-  tone({frequency=520,duration=.045,gain=.018,type="triangle",drop=80}){const ctx=this.resume();if(!ctx)return;try{const now=ctx.currentTime,osc=ctx.createOscillator(),amp=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(frequency,now);osc.frequency.exponentialRampToValueAtTime(Math.max(60,frequency-drop),now+duration);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(gain,now+.006);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp);amp.connect(ctx.destination);osc.start(now);osc.stop(now+duration+.01)}catch(e){}}
-  playDigit(mode="normal"){const boss=mode==="boss",variation=.97+Math.random()*.06;this.tone({frequency:(boss?300:520)*variation,duration:boss?.06:.042,gain:boss?.023:.014,type:boss?"sawtooth":"triangle",drop:boss?95:120})}
-  playConfirm(mode="normal"){const boss=mode==="boss";this.tone({frequency:boss?190:360,duration:boss?.09:.072,gain:boss?.032:.024,type:"sawtooth",drop:boss?80:140})}
-  playBackspace(){this.tone({frequency:180,duration:.035,gain:.012,type:"square",drop:35})}
+  resume(){if(!this.enabled)return null;try{const AudioCtor=globalThis.AudioContext||globalThis.webkitAudioContext;if(!AudioCtor)return null;if(!this.context){this.context=new AudioCtor();this.createdContexts++;this.setupOutput()}if(this.context.state==="suspended"){const resumed=this.context.resume();if(resumed&&resumed.catch)resumed.catch(()=>{})}return this.context}catch(e){return null}}
+  setupOutput(){const ctx=this.context;this.masterGain=ctx.createGain();this.masterGain.gain.value=.78;this.compressor=ctx.createDynamicsCompressor();this.compressor.threshold.value=-18;this.compressor.knee.value=12;this.compressor.ratio.value=4;this.compressor.attack.value=.003;this.compressor.release.value=.09;this.masterGain.connect(this.compressor);this.compressor.connect(ctx.destination);const length=Math.ceil(ctx.sampleRate*.065);this.noiseBuffer=ctx.createBuffer(1,length,ctx.sampleRate);const data=this.noiseBuffer.getChannelData(0);for(let n=0;n<length;n++)data[n]=(Math.random()*2-1)*(1-n/length)}
+  oscillatorLayer(frequency,duration,gain,type="triangle",drop=.55){const ctx=this.context,now=ctx.currentTime,osc=ctx.createOscillator(),amp=ctx.createGain();osc.type=type;osc.frequency.setValueAtTime(frequency,now);osc.frequency.exponentialRampToValueAtTime(Math.max(90,frequency*drop),now+duration);amp.gain.setValueAtTime(.0001,now);amp.gain.exponentialRampToValueAtTime(gain,now+.003);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);osc.connect(amp);amp.connect(this.masterGain);osc.start(now);osc.stop(now+duration+.008)}
+  noiseLayer(duration,gain,centerHz){if(!gain||!this.noiseBuffer)return;const ctx=this.context,now=ctx.currentTime,source=ctx.createBufferSource(),filter=ctx.createBiquadFilter(),amp=ctx.createGain();source.buffer=this.noiseBuffer;filter.type="bandpass";filter.frequency.value=centerHz;filter.Q.value=.8;amp.gain.setValueAtTime(gain,now);amp.gain.exponentialRampToValueAtTime(.0001,now+duration);source.connect(filter);filter.connect(amp);amp.connect(this.masterGain);source.start(now);source.stop(now+duration+.005)}
+  playProfile(profile,variation=1){if(!this.resume())return;try{this.oscillatorLayer(profile.attackHz*variation,Math.min(.05,profile.duration),profile.attackGain,"triangle",.62);if(profile.bodyGain)this.oscillatorLayer(profile.bodyHz*variation,profile.duration,profile.bodyGain,"sawtooth",.68);this.noiseLayer(profile.noiseDuration,profile.noiseGain,variation<1?850:1150)}catch(e){}}
+  playDigit(mode="normal"){const variation=.95+Math.random()*.10;this.playProfile(mode==="boss"?SOUND_PROFILES.bossDigit:SOUND_PROFILES.normalDigit,variation)}
+  playConfirm(mode="normal"){this.playProfile(mode==="boss"?SOUND_PROFILES.bossConfirm:SOUND_PROFILES.normalConfirm,1)}
+  playBackspace(){this.playProfile(SOUND_PROFILES.backspace,1)}
 }
 const soundManager=new SoundManager();
 let qs=[],i=0,w=[],v="",t0=0,tick,kind="normal",activeBoss=null;
