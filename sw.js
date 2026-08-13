@@ -1,8 +1,9 @@
-const CACHE="calc-rpg-v9";
+const CACHE="calc-rpg-v10";
 const CORE=["./","./index.html","./manifest.webmanifest","./app-icon.png","./icon-180.png","./icon-192.png","./icon-512.png"];
 const TIERS=["leather","stone","iron","diamond","nether"];
 const PARTS=["weapon","head","body","legs","feet"];
-const ASSETS=CORE.concat(TIERS.flatMap(t=>PARTS.map(p=>`./eq_${t}_${p}.png`)));
+const BOSS_ASSETS=TIERS.map(t=>`./assets/bosses/boss_${t}.png`);
+const ASSETS=CORE.concat(TIERS.flatMap(t=>PARTS.map(p=>`./eq_${t}_${p}.png`)),BOSS_ASSETS);
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
 self.addEventListener("fetch",event=>{if(event.request.method!=="GET")return;event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match("./index.html"))))});
