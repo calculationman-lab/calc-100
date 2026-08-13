@@ -1,79 +1,175 @@
-<!doctype html><html lang="ja"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>100問計算</title><link rel="manifest" href="./manifest.webmanifest">
-<meta name="theme-color" content="#17202a"><meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="100問計算">
-<link rel="apple-touch-icon" href="./icon-192.png">
-<style>
-*{box-sizing:border-box}html,body{overscroll-behavior:none}body{margin:0;background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
-body.lock{position:fixed;inset:0;overflow:hidden;touch-action:none}main{min-height:100dvh;display:grid;place-items:center;padding:20px}.card{width:min(700px,100%);background:white;border-radius:24px;padding:26px;box-shadow:0 10px 35px #0002}
-.top{display:flex;justify-content:space-between;align-items:center;color:#667085;font-weight:700}.pill{background:#eef2f6;border-radius:999px;padding:8px 13px}
-.problem{text-align:center;font-size:clamp(52px,13vw,96px);font-weight:850;margin:45px 0 25px;letter-spacing:.02em}
-input{width:100%;font-size:clamp(38px,10vw,64px);text-align:center;border:3px solid #d0d5dd;border-radius:18px;padding:13px;background:#fff}
-button{width:100%;border:0;border-radius:16px;padding:18px;font-size:21px;font-weight:800;margin-top:14px;background:#17202a;color:white}
-.secondary{background:#e8edf2;color:#17202a}.hint{text-align:center;color:#98a2b3;margin-top:12px}.hidden{display:none}
-.score{text-align:center;font-size:clamp(42px,11vw,72px);font-weight:900;margin:25px 0 5px}.time{text-align:center;font-size:25px;margin-bottom:25px}
-.wrong{border-top:1px solid #e4e7ec;padding:13px 3px;font-size:20px;display:flex;justify-content:space-between}.wrong b{font-size:21px}
-h1{text-align:center}.today{text-align:center;color:#667085;margin-bottom:15px}.note{text-align:center;color:#667085;font-size:14px;line-height:1.6}
+<!doctype html><html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no"><title>100問計算RPG</title><link rel="manifest" href="./manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#071b32"><link rel="apple-touch-icon" href="./icon-180.png"><style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:#eef1f4;font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic","Meiryo",sans-serif;color:#17202a;overscroll-behavior:none}body.lock{position:fixed;inset:0;overflow:hidden;touch-action:none}main{min-height:100dvh;display:grid;place-items:center;padding:12px}.card{width:min(1220px,100%);background:#fff;border-radius:22px;padding:14px}.hide{display:none!important}h1{text-align:center;margin:4px}button{width:100%;border:0;border-radius:13px;padding:14px;margin-top:8px;background:#17202a;color:#fff;font-size:18px;font-weight:800;cursor:pointer}.secondary{background:#e8edf2;color:#17202a}.top{display:flex;align-items:center;justify-content:space-between;gap:8px;font-weight:800;color:#667085}.problem{text-align:center;font-size:clamp(48px,11vh,86px);font-weight:900;margin:18px 0 8px}.display{height:70px;border:3px solid #ccd2d8;border-radius:14px;display:grid;place-items:center;font-size:50px;font-weight:900}.keys{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:8px}.key{margin:0;padding:12px;background:#e8edf2;color:#17202a;font-size:29px}.enter{background:#17202a;color:#fff;font-size:17px}.score{text-align:center;font-size:50px;font-weight:900}.loot{text-align:center;background:#fff5c8;padding:15px;border-radius:14px;font-size:22px;font-weight:900;margin:10px 0}.row{border-top:1px solid #ddd;padding:10px 2px;display:flex;justify-content:space-between}.geargrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px}.gear{text-align:center;background:#eef2f6;border-radius:10px;padding:8px}.gear b{display:block;font-size:20px}
+@media(max-height:750px){.card{padding:11px}.problem{font-size:46px;margin:7px}.display{height:52px;font-size:38px}.key{padding:8px}}
 
-.answerDisplay{width:100%;min-height:84px;font-size:clamp(42px,10vw,68px);font-weight:850;text-align:center;border:3px solid #d0d5dd;border-radius:18px;padding:8px;background:#fff;margin-bottom:12px}
-.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-.keypad .key{margin:0;padding:17px 8px;font-size:clamp(24px,6vw,34px);background:#e8edf2;color:#17202a;touch-action:manipulation}
-.keypad .enter{background:#17202a;color:#fff;font-size:20px}
-.keypad .erase{background:#dfe4ea}
-@media (min-width:700px){.keypad .key{padding:20px}}
-@media(max-height:750px){.card{padding:14px}.problem{margin:12px 0;font-size:50px}.answerDisplay{min-height:58px;font-size:40px}.keypad .key{padding:10px}.hint{display:none}}</style></head><body><main><section class="card">
-<div id="start"><h1>100問計算</h1><div class="today" id="date"></div><div id="todayStatus" style="text-align:center;font-weight:800;padding:14px;border-radius:14px;background:#fff3e8;margin:12px 0"></div>
-<p class="note">足し算50問＋引き算50問。<br>毎日、その日の100問をランダム生成します。</p><button id="startBtn">今日の100問をはじめる</button><button id="historyBtn" class="secondary">過去の記録を見る</button></div>
-<div id="quiz" class="hidden"><div class="top"><span class="pill" id="progress"></span><span id="timer">0:00</span></div>
-<div class="problem" id="problem"></div><div id="answerDisplay" class="answerDisplay" aria-label="入力した答え">&nbsp;</div>
-<div class="keypad" aria-label="数字入力">
-<button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
-<button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
-<button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
-<button class="key erase" data-key="back">←</button><button class="key" data-key="0">0</button><button class="key enter" data-key="enter">決定</button>
-</div><div class="hint">数字を押して「決定」</div></div>
-<div id="result" class="hidden"><h1>今日の結果</h1><div class="score" id="score"></div><div class="time" id="finalTime"></div>
-<div id="wrongList"></div><button id="retry" class="hidden">間違えた問題をもう一度</button><button id="newRun" class="secondary">もう一度100問</button></div>
-<div id="history" class="hidden"><h1>過去の記録</h1><div id="historyList"></div><button id="historyBack" class="secondary">トップへ戻る</button></div></section></main>
-<script>
-const $=id=>document.getElementById(id); let qs=[],idx=0,wrong=[],startAt=0,tick=null,retryMode=false;
-function seedDate(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
-function rng(seed){let h=2166136261;for(let c of seed){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
-function shuffle(a,r=Math.random){for(let i=a.length-1;i;i--){let j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
-function generate(extra=""){let r=rng(seedDate()+extra),a=[];let used=new Set();
- while(a.length<50){let x=10+Math.floor(r()*90),y=10+Math.floor(r()*90),k=`+${x},${y}`;if(!used.has(k)){used.add(k);a.push({x,y,op:"+",ans:x+y})}}
- while(a.length<100){let x=10+Math.floor(r()*90),y=10+Math.floor(r()*90);if(y>x)[x,y]=[y,x];let k=`-${x},${y}`;if(!used.has(k)){used.add(k);a.push({x,y,op:"−",ans:x-y})}}
- return shuffle(a,r)}
+.quizBack{width:auto!important;margin:0!important;padding:8px 12px!important;font-size:15px!important;background:#e8edf2!important;color:#17202a!important;flex:0 0 auto}
+
+
+
+.subPage{min-height:70vh;padding:4px}
+.ruleCard,.bossCard{background:#f7f1e5;border:3px solid #79551d;border-radius:16px;padding:16px;box-shadow:inset 0 0 0 2px #d8bb78}
+.ruleCard ol{line-height:1.75;padding-left:24px}
+.bossCard{text-align:center}.bossEmoji{font-size:72px}.bossCard h2{margin:5px 0}
+
+/* TOP UI: independent HTML components; no completed-UI background artwork. */
+:root{--navy:#06182a;--navy2:#0c304a;--gold:#e7ad32;--gold2:#ffe28a;--ink:#211300;--cream:#fff6d4;--panel-border:2px solid var(--gold)}
+#home{font-family:"Yu Gothic","Meiryo",sans-serif;color:#fff}
+.rpgHome{overflow:hidden;border:4px solid var(--gold);border-radius:22px;padding:clamp(12px,1.6vw,20px);background:radial-gradient(circle at 18% 8%,#17649366,transparent 28%),radial-gradient(circle at 83% 18%,#265f3766,transparent 28%),linear-gradient(160deg,#0a2b47 0 38%,#0c322f 38% 57%,#06182a 57%);box-shadow:inset 0 0 0 2px #5c3610,0 10px 30px #0018}
+.rpgGrid{display:grid;grid-template-columns:minmax(270px,1.02fr) minmax(270px,.92fr) minmax(420px,1.48fr);gap:14px;align-items:stretch}
+.rpgGrid>.rpgPanel{height:100%}.rpgPanel{background:linear-gradient(145deg,#102f48f5,#061625f7);border:var(--panel-border);border-radius:14px;padding:14px;box-shadow:inset 0 0 18px #0008,0 3px 10px #0005}
+.heroPanel{display:flex;flex-direction:column;align-items:center;text-align:center;background:linear-gradient(145deg,#2ba0df55,#08263cef 50%),linear-gradient(155deg,#39a6df 0 35%,#17744c 35% 60%,#0b3b2c 60%)}
+.gameTitle{margin:0;color:#ffd65a;font-family:Impact,"Arial Black","Yu Gothic",Meiryo,sans-serif;font-size:clamp(32px,3.2vw,49px);font-weight:900;letter-spacing:.02em;line-height:1.05;-webkit-text-stroke:1.5px #3a2100;text-shadow:0 2px 0 #fff0ad,0 5px 0 #5b3100,3px 3px 0 #1b0c00,-2px -2px 0 #1b0c00}.tagline{margin:10px 0 8px;color:#fff0a0;font-weight:900;text-shadow:1px 2px #173006}
+.heroPortrait{width:min(225px,72%);aspect-ratio:1;object-fit:cover;border-radius:22%;border:4px solid #ffd85c;box-shadow:0 6px 18px #0008;margin:auto;background:#0782dc}
+.startButton,.bossAction{background:linear-gradient(#20a5ff,#0753aa)!important;border:3px solid #ffdf69!important;box-shadow:inset 0 0 0 2px #082f65,0 5px 0 #4f2d00!important;color:#fff!important;text-shadow:1px 2px #001d49}.startButton{white-space:nowrap;padding:14px 8px!important;font-size:clamp(17px,1.65vw,24px)!important}.startButton:hover,.menuButton:hover{filter:brightness(1.14);transform:translateY(-1px)}
+.panelTitle{margin:0 0 12px;padding-bottom:8px;border-bottom:1px solid #b78632;color:#ffe699;font-family:"Arial Black","Yu Gothic",Meiryo,sans-serif;font-size:20px;font-weight:900}.dailyStatus{margin-bottom:12px;padding:10px;border:1px solid #deb24c;border-radius:9px;background:#ffffff0d;color:#fff5cc;font-size:13px;font-weight:900;line-height:1.45}.dailyStatus.complete{background:#174e2d;color:#e8ffbd}.levelLine{font-size:38px;color:#ffd84d;font-weight:900}.levelLine small{font-size:16px;color:#fff}
+.statLabel{display:flex;justify-content:space-between;margin:10px 0 4px;font-weight:800}.expBar{height:16px;border:2px solid #d6b566;border-radius:9px;background:#02070b;overflow:hidden}.expFill{height:100%;width:0;background:linear-gradient(90deg,#32b74d,#b9f15b);transition:width .3s}
+.statList{display:grid;gap:7px;margin-top:15px}.statItem{display:flex;justify-content:space-between;gap:10px;padding:9px;border-radius:8px;background:#ffffff0c;border:1px solid #ffffff18}.statItem b{color:#ffe07a;text-align:right}.rankLabel{margin:13px 0 6px;color:#fff1bd;font-size:13px;font-weight:900}.rankPath{display:flex;align-items:center;justify-content:space-between;gap:3px;font-size:11px}.rankStep{padding:6px 5px;border-radius:7px;background:#07111d;color:#9ba5ae;white-space:nowrap}.rankStep.active{background:#b17314;color:#fff3c1;font-weight:900}
+.equipGrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}.eqCard{min-width:0;min-height:184px;display:flex;flex-direction:column;align-items:center;overflow:hidden;border:1px solid #b78326;border-radius:9px;background:linear-gradient(#fff7dc,#ead6a6);color:#2b1b08;box-shadow:inset 0 0 0 1px #fff9d8}.eqHead{width:100%;padding:6px 2px;background:linear-gradient(#5a3b0c,#2b1b05);color:#fff2c6;text-align:center;font-size:12px;font-weight:900}.eqIconWrap{width:100%;height:72px;display:grid;place-items:center;margin-top:4px}.eqIcon{display:block;width:62px;height:62px;object-fit:contain;image-rendering:pixelated;border:0}.eqName{min-height:3.2em;display:flex;align-items:center;justify-content:center;padding:3px 5px;text-align:center;font-size:12px;font-weight:900;line-height:1.35;overflow-wrap:anywhere}.eqState{margin:auto 4px 7px;padding:4px 8px;border-radius:99px;background:#2d7b2f;color:#fff;font-size:10px;font-weight:900;white-space:nowrap}.eqState.missing{background:#746c61;color:#f4f1eb}.completeValue{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px;padding:0;background:transparent;color:#ffe69a;font-size:14px}.completeMetric{padding:8px;border-radius:8px;background:#ffffff0d;text-align:center}.completeMetric b{display:block;margin-top:2px;font-size:19px}.menuGrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.menuButton{margin:0!important;padding:10px 6px!important;font-size:13px!important;background:linear-gradient(#573508,#271704)!important;border:1px solid #d8a448!important}
+.widePanels{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px}.infoPanel{min-height:210px}.bossSummary{display:grid;grid-template-columns:82px 1fr;gap:12px;align-items:center}.bossMark{font-size:62px;text-align:center}.bossSummary p{margin:4px 0}.bossReady{color:#ffd64b;font-weight:900}.recentOverlay{font-size:13px}.recentRow{display:grid;grid-template-columns:.8fr .85fr .75fr .9fr;gap:8px;padding:9px 0;border-bottom:1px solid #835125;align-items:center}.recentEmpty{min-height:110px;display:grid;place-items:center;color:#d8c6a2;font-weight:800}
+.ruleStrip{margin-top:14px}.ruleStrip summary{cursor:pointer;color:#ffe699;font-weight:900}.ruleStrip ol{columns:2;line-height:1.75;margin-bottom:0}
+.subPage{min-height:70vh;padding:4px}.ruleCard,.bossCard{background:#f7f1e5;border:3px solid #79551d;border-radius:16px;padding:16px;box-shadow:inset 0 0 0 2px #d8bb78}.ruleCard ol{line-height:1.75;padding-left:24px}.bossCard{text-align:center}.bossEmoji{font-size:72px}.bossCard h2{margin:5px 0}
+@media(max-width:1040px){.rpgGrid{grid-template-columns:1fr}.rpgGrid>.rpgPanel{height:auto}.heroPanel{min-height:0}.heroPortrait{width:190px}.equipGrid{grid-template-columns:repeat(3,minmax(0,1fr))}.eqCard{min-height:176px}.equipGrid .eqCard:nth-child(4),.equipGrid .eqCard:nth-child(5){grid-column:span 1}.widePanels{grid-template-columns:1fr}.ruleStrip ol{columns:1}.startButton{font-size:clamp(18px,3.5vw,25px)!important}}
+@media(max-width:560px){main{padding:5px}.card{padding:5px;border-radius:10px}.rpgHome{padding:9px;border-width:2px}.rpgPanel{padding:10px}.gameTitle{font-size:clamp(31px,11vw,44px)}.heroPortrait{width:170px}.startButton{font-size:clamp(15px,4.5vw,20px)!important;padding-inline:4px!important}.equipGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.eqCard:first-child{grid-column:1/-1}.eqName{font-size:13px}.menuGrid{grid-template-columns:1fr}.completeValue{grid-template-columns:1fr}.recentRow{grid-template-columns:1fr 1fr}.recentRow .recentKind{display:none}.rankPath{overflow-x:auto;justify-content:flex-start;padding-bottom:3px}.rankStep{font-size:11px}.ruleStrip ol{padding-left:23px}}
+@media(max-height:750px){.problem{font-size:46px;margin:7px}.display{height:52px;font-size:38px}.key{padding:8px}}
+</style></head><body><main><section class="card">
+<div id="home"><div class="rpgHome">
+  <div class="rpgGrid">
+    <section class="rpgPanel heroPanel" aria-labelledby="gameTitle">
+      <h1 class="gameTitle" id="gameTitle">100問計算RPG</h1><p class="tagline">毎日100問で冒険を進めよう！</p>
+      <img class="heroPortrait" src="./app-icon.png" alt="青い宝石を身につけた冒険者">
+      <button class="startButton" id="startHot">⚔ 今日の100問をはじめる！</button>
+    </section>
+    <section class="rpgPanel" aria-labelledby="statusTitle"><h2 class="panelTitle" id="statusTitle">⚔ 冒険者ステータス</h2><div class="dailyStatus" id="dailyStatus"></div>
+      <div class="levelLine"><small>Lv.</small> <span id="lvLive"></span></div>
+      <div class="statLabel"><span>EXP</span><span id="xpLive"></span></div><div class="expBar"><div id="xpFill" class="expFill"></div></div>
+      <div class="statList"><div class="statItem"><span>📅 冒険日数</span><b id="daysLive"></b></div><div class="statItem"><span>📖 総計算数</span><b id="totalLive"></b></div><div class="statItem"><span>🔥 連続ボーナス</span><b id="bonusLive"></b></div><div class="statItem"><span>👾 次のボスまで</span><b id="bossLive"></b></div></div>
+      <div class="rankLabel">現在の装備ランク</div><div class="rankPath" id="rankPath" aria-label="装備ランク"></div>
+    </section>
+    <section class="rpgPanel" aria-labelledby="equipTitle"><h2 class="panelTitle" id="equipTitle">🛡 現在の装備</h2><div class="equipGrid" id="equipOverlay"></div><div class="completeValue" id="completeValue"></div>
+      <div class="menuGrid"><button class="menuButton" id="historyHot">📜 過去の記録</button><button class="menuButton" id="gearHot">📖 装備図鑑</button><button class="menuButton" id="bossBookHot">👾 ボス図鑑</button><button class="menuButton" id="rulesHot">❔ 遊び方 / ルール</button></div>
+    </section>
+  </div>
+  <div class="widePanels"><section class="rpgPanel infoPanel"><h2 class="panelTitle">👾 ボスについて</h2><div class="bossSummary"><div class="bossMark">🐉</div><div><p><b>はじまりの竜</b></p><p>通常100問を3回クリアすると出現。</p><p>20問すべて一発正解で撃破！</p><p class="bossReady" id="bossSummary"></p><p id="bossWins"></p></div></div><button id="bossBtn" class="hide bossAction">ボスに挑戦する</button></section>
+  <section class="rpgPanel infoPanel"><h2 class="panelTitle">👑 最近の記録</h2><div class="recentOverlay" id="recentOverlay"></div></section></div>
+  <details class="rpgPanel ruleStrip"><summary>📖 ゲームルールを表示</summary><ol><li>毎日100問の計算に挑戦する</li><li>100問を最後まで解くとEXP獲得</li><li>連続して挑戦するとEXPボーナス</li><li>休んでもレベル・装備・進行は失わない</li><li>100問を3回クリアするとボス出現</li><li>ボス戦は20問</li><li>全問一発正解でボス撃破</li><li>ボスを倒すと防具宝箱を1個GET</li><li>防具はランダムで重複あり</li><li>頭・胴・脚・足を全部集めると次ランク解放</li><li>ランク解放時に新しい剣を自動装備</li><li>最高ランクを目指す</li></ol></details>
+</div></div>
+<div id="quiz" class="hide"><div class="top"><button id="quizBack" class="quizBack">← TOP</button><span id="mode"></span><span id="prog"></span><span id="timer"></span></div><div class="problem" id="prob"></div><div class="display" id="disp"></div><div class="keys"><button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button><button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button><button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button><button class="key" data-k="B">←</button><button class="key" data-k="0">0</button><button class="key enter" data-k="E">決定</button></div></div>
+<div id="result" class="hide"><h1 id="rtitle"></h1><div class="score" id="score"></div><div id="rinfo" style="text-align:center"></div><div id="loot" class="loot hide"></div><div id="wrongs"></div><button id="retry" class="hide"></button><button class="secondary back">トップへ</button></div>
+<div id="history" class="hide"><h1>過去の記録</h1><div id="hist"></div><button class="secondary back">トップへ</button></div>
+<div id="gearbook" class="hide"><h1>装備図鑑</h1><div id="gear"></div><button class="secondary back">トップへ</button></div>
+
+<div id="bossbook" class="hide subPage">
+  <h1>ボス図鑑</h1>
+  <div class="bossCard">
+    <div class="bossEmoji">🐉</div>
+    <h2>はじまりの竜</h2>
+    <p>通常の100問を3回クリアすると出現。</p>
+    <p><b>20問すべて一発正解</b>で撃破できます。</p>
+    <div id="bossRecord"></div>
+  </div>
+  <button class="secondary back">トップへ戻る</button>
+</div>
+
+<div id="rulesPage" class="hide subPage">
+  <h1>遊び方・ルール</h1>
+  <div class="ruleCard">
+    <ol>
+      <li>毎日の100問は、足し算50問＋引き算50問です。</li>
+      <li>100問を最後まで解くとEXPを獲得します。</li>
+      <li>連続して取り組めた日はEXPに連続ボーナスが付きます。休んでもレベルや装備は失いません。</li>
+      <li>通常の100問を3回クリアするとボスが出現します。</li>
+      <li>ボス戦は20問。<b>全問一発正解</b>で撃破です。</li>
+      <li>ボスを倒すと、現在ランクの防具（頭・胴・脚・足）をランダムで1個獲得します。同じ装備が重複することもあります。</li>
+      <li>各ランクが解放されると、そのランクの剣を自動で装備します。頭・胴・脚・足の4部位を全部集めると次の装備ランクが解放されます。</li>
+      <li>装備ランクは <b>革 → 石 → 鉄 → ダイヤ → ネザライト</b> の順です。</li>
+      <li>最高ランクの装備コンプリートを目指しましょう。</li>
+    </ol>
+  </div>
+  <button class="secondary back">トップへ戻る</button>
+</div>
+</section></main><script>
+const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];let qs=[],i=0,w=[],v="",t0=0,tick,kind="normal";
+function dk(d=new Date()){return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function state(){const base={xp:0,clears:0,boss:false,tier:0,gear:{},hist:[],dates:[],total:0};try{const old=JSON.parse(localStorage.getItem("calcRPG")||"{}");const s={...base,...old};s.gear=s.gear&&typeof s.gear==="object"?s.gear:{};s.hist=Array.isArray(s.hist)?s.hist:[];s.dates=Array.isArray(s.dates)?s.dates:[];s.xp=Number.isFinite(s.xp)?s.xp:0;s.clears=Number.isFinite(s.clears)?s.clears:0;s.tier=Math.min(4,Math.max(0,Number.isFinite(s.tier)?s.tier:0));s.total=Number.isFinite(s.total)?s.total:0;s.boss=Boolean(s.boss);return s}catch(e){return base}}
+function save(s){localStorage.setItem("calcRPG",JSON.stringify(s))}
+function sh(a){for(let j=a.length-1;j;j--){let k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
+function gen(n){let a=[],u=new Set(),p=Math.ceil(n/2);while(a.length<p){let x=10+Math.floor(Math.random()*90),y=10+Math.floor(Math.random()*90),k=`+${x},${y}`;if(!u.has(k)){u.add(k);a.push({x,y,o:"+",a:x+y})}}while(a.length<n){let x=10+Math.floor(Math.random()*90),y=10+Math.floor(Math.random()*90);if(y>x)[x,y]=[y,x];let k=`-${x},${y}`;if(!u.has(k)){u.add(k);a.push({x,y,o:"−",a:x-y})}}return sh(a)}
+function hide(){["home","quiz","result","history","gearbook","bossbook","rulesPage"].forEach(x=>$(x).classList.add("hide"))}
 function fmt(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+"分"+String(s%60).padStart(2,"0")+"秒"}
-function fmtShort(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
-function begin(list, retry=false){document.body.classList.add("lock");qs=list;idx=0;wrong=[];retryMode=retry;$("start").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");startAt=Date.now();clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmtShort(Date.now()-startAt),500);show()}
-let entered="";
-function paintAnswer(){$("answerDisplay").textContent=entered||"　"}
-function show(){if(idx>=qs.length)return finish();let q=qs[idx];$("progress").textContent=(idx+1)+" / "+qs.length;$("problem").textContent=q.x+" "+q.op+" "+q.y+" =";entered="";paintAnswer()}
-function submit(){let v=entered;if(v==="")return;let q=qs[idx];if(Number(v)!==q.ans)wrong.push({...q,given:v});idx++;show()}
-function keypress(k){
- if(k==="back"){entered=entered.slice(0,-1);paintAnswer();return}
- if(k==="enter"){submit();return}
- if(entered.length<3){entered+=k;paintAnswer()}
-}
-function finish(){document.body.classList.remove("lock");clearInterval(tick);let elapsed=Date.now()-startAt;$("quiz").classList.add("hidden");$("result").classList.remove("hidden");
- $("score").textContent=(qs.length-wrong.length)+" / "+qs.length+"点";$("finalTime").textContent="所要時間 "+fmt(elapsed);
- let wl=$("wrongList");wl.innerHTML=wrong.length?'<h2>間違えた問題</h2>':'<p class="note">全問正解！</p>';
- wrong.forEach(q=>{let div=document.createElement("div");div.className="wrong";div.innerHTML=`<span>${q.x} ${q.op} ${q.y} = <s>${q.given}</s></span><b>${q.ans}</b>`;wl.appendChild(div)});
- $("retry").classList.toggle("hidden",wrong.length===0);$("retry").textContent="間違えた"+wrong.length+"問をもう一度";
- if(!retryMode&&qs.length===100){let hist=JSON.parse(localStorage.getItem("calc100History")||"[]");hist.push({date:seedDate(),completedAt:new Date().toISOString(),score:qs.length-wrong.length,total:100,time:elapsed});localStorage.setItem("calc100History",JSON.stringify(hist.slice(-365)))}
-}
-$("date").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric"});
+function streak(s){let ds=[...new Set(s.dates)].sort().reverse();if(!ds.length)return 0;let cur=new Date(ds[0]+"T12:00:00"),n=1;for(let j=1;j<ds.length;j++){let d=new Date(ds[j]+"T12:00:00"),dif=Math.round((cur-d)/86400000);if(dif===1){n++;cur=d}else break}return n}
+function bonusStreak(s,date=new Date()){let ds=[...new Set(s.dates)].sort().reverse();if(!ds.length)return 1;const latest=new Date(ds[0]+"T12:00:00"),today=new Date(dk(date)+"T12:00:00"),gap=Math.round((today-latest)/86400000),current=streak(s);return gap===0?current:gap===1?current+1:1}
+function streakBonus(days){return Math.min(Math.max(days-1,0)*10,50)}
+function scoreBonus(score){return(score>=90?20:0)+(score>=95?10:0)+(score===100?20:0)}
+function normalGain(score,days){return 100+scoreBonus(score)+streakBonus(days)}
+function levelInfo(xp){return{level:Math.floor(xp/300)+1,current:xp%300}}
+function todayNormal(s,date=new Date()){return s.hist.filter(x=>x.kind==="normal"&&x.total===100&&x.date===dk(date)).slice(-1)[0]||null}
 
-function getHist(){return JSON.parse(localStorage.getItem("calc100History")||"[]")}
-function updateStatus(){let a=getHist().filter(x=>x.date===seedDate()&&x.total===100),s=$("todayStatus");if(a.length){let x=a[a.length-1];s.style.background="#edf8f0";s.innerHTML="今日の100問：完了<br>"+x.score+"/100点　"+fmt(x.time)}else{s.style.background="#fff3e8";s.textContent="今日の100問：まだ終わっていません"}}
-function showHistory(){["start","quiz","result"].forEach(x=>$(x).classList.add("hidden"));$("history").classList.remove("hidden");let a=getHist().slice().reverse(),el=$("historyList");el.innerHTML=a.length?"":"<p class='note'>まだ記録がありません。</p>";a.forEach(x=>{let d=x.completedAt?new Date(x.completedAt):new Date(x.date+"T00:00:00");let row=document.createElement("div");row.style.cssText="border-top:1px solid #e4e7ec;padding:12px 2px;font-size:18px";row.textContent=(d.getMonth()+1)+"/"+d.getDate()+"　"+x.score+"/"+x.total+"点　"+fmt(x.time);el.appendChild(row)})}
-function backHome(){document.body.classList.remove("lock");["quiz","result","history"].forEach(x=>$(x).classList.add("hidden"));$("start").classList.remove("hidden");updateStatus()}
-$("startBtn").onclick=()=>begin(generate());
-document.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>keypress(b.dataset.key)));
-document.addEventListener("keydown",e=>{if(/^[0-9]$/.test(e.key))keypress(e.key);else if(e.key==="Backspace")keypress("back");else if(e.key==="Enter")keypress("enter")});
-$("retry").onclick=()=>{let list=wrong.map(({given,...q})=>q);begin(shuffle(list),true)};
-$("newRun").onclick=()=>begin(generate(String(Date.now())));$("historyBtn").onclick=showHistory;$("historyBack").onclick=backHome;updateStatus();
-if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+
+function eqName(tier,part){
+  if(part==="weapon") return W[tier];
+  const suffix={head:"のかぶと",body:"のよろい",legs:"のズボン",feet:"のブーツ"}[part];
+  return T[tier]+suffix;
+}
+function renderTopEquipment(s){
+  const tier=Math.min(s.tier,4), cards=[];
+  cards.push({part:"weapon",label:"武器",owned:true,count:1});
+  PK.forEach((part,pi)=>{const count=s.gear[tier+"-"+pi]||0;cards.push({part,label:P[pi],owned:count>0,count})});
+  $("equipOverlay").innerHTML=cards.map(c=>{
+    const src="./eq_"+TK[tier]+"_"+c.part+".png";
+    const count=c.part!=="weapon"&&c.count>1?` ×${c.count}`:"";
+    return `<div class="eqCard"><div class="eqHead">${c.label}</div><div class="eqIconWrap"><img class="eqIcon" src="${src}" alt=""></div><div class="eqName">${eqName(tier,c.part)}${count}</div><div class="eqState ${c.owned?"":"missing"}">${c.owned?"所持中":"未入手"}</div></div>`;
+  }).join("");
+  const armorCount=PK.reduce((n,_,pi)=>n+((s.gear[tier+"-"+pi]||0)>0?1:0),0);
+  $("completeValue").innerHTML=`<div class="completeMetric">現在装備<b>${1+armorCount} / 5</b></div><div class="completeMetric">防具コンプリート<b>${armorCount} / 4</b></div>`;
+}
+function renderRecent(s){
+  const a=s.hist.filter(x=>x&&x.kind==="normal"&&x.date&&Number.isFinite(x.score)&&Number.isFinite(x.time)).slice(-5).reverse();
+  if(!a.length){$("recentOverlay").innerHTML='<div class="recentEmpty">まだ記録はありません</div>';return}
+  $("recentOverlay").innerHTML=a.map(x=>{
+    const gain=x.xp?("EXP +"+x.xp):"";
+    return `<div class="recentRow"><span>${x.date.slice(5)}</span><b>${x.score}点</b><span>${fmt(x.time).replace("分",":").replace("秒","")}</span><b style="color:#ffd43b">${gain}</b></div>`;
+  }).join("");
+}
+
+function home(){document.body.classList.remove("lock");hide();$("home").classList.remove("hide");
+  let s=state(),level=levelInfo(s.xp),lv=level.level,x=level.current,st=bonusStreak(s),daily=todayNormal(s);
+  $("lvLive").textContent=lv;
+  $("xpLive").textContent=x+" / 300";
+  $("xpFill").style.width=(x/3)+"%";
+  $("dailyStatus").classList.toggle("complete",Boolean(daily));
+  $("dailyStatus").textContent=daily?`今日の100問：完了　${daily.score}/100点　${fmt(daily.time)}`:"今日の100問：まだ終わっていません";
+  $("daysLive").textContent=new Set(s.dates).size+"日";
+  $("totalLive").textContent=s.total.toLocaleString()+"問";
+  $("bonusLive").textContent=st>1?"+"+streakBonus(st)+" EXP（"+st+"日連続）":"なし";
+  $("bossLive").textContent=s.boss?"出現中！":"あと "+(3-(s.clears%3))+"回";
+  $("bossSummary").textContent=s.boss?"BOSS出現中！":"次のボスまであと "+(3-(s.clears%3))+"回";
+  $("bossWins").textContent="ボス撃破数 "+s.hist.filter(x=>x.kind==="boss"&&x.score===20).length+"体";
+  $("rankPath").innerHTML=T.map((name,n)=>`<span class="rankStep ${n===s.tier?"active":""}">${name}</span>${n<T.length-1?"<span>›</span>":""}`).join("");
+  renderTopEquipment(s);renderRecent(s);
+  $("bossBtn").classList.toggle("hide",!s.boss)
+}
+function startSession(questions,k){kind=k;qs=sh(questions.slice());i=0;w=[];v="";hide();$("quiz").classList.remove("hide");document.body.classList.add("lock");$("mode").textContent=k==="boss"?"BOSS":k==="review"?"復習":"通常";t0=Date.now();$("timer").textContent=fmt(0);clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmt(Date.now()-t0),500);show()}
+function begin(n,k){startSession(gen(n),k)}
+function show(){if(i>=qs.length)return finish();let q=qs[i];$("prog").textContent=(i+1)+"/"+qs.length;$("prob").textContent=q.x+" "+q.o+" "+q.y+" =";v="";$("disp").textContent="　"}
+function key(k){if(k==="B"){v=v.slice(0,-1)}else if(k==="E"){if(v==="")return;let q=qs[i];if(+v!==q.a)w.push({...q,g:v});i++;return show()}else if(v.length<3)v+=k;$("disp").textContent=v||"　"}
+function finish(now=new Date()){clearInterval(tick);document.body.classList.remove("lock");let tm=Math.max(0,Date.now()-t0),s=state(),score=qs.length-w.length;hide();$("result").classList.remove("hide");$("loot").classList.add("hide");$("rtitle").textContent=kind==="boss"?"ボス戦結果":kind==="review"?"復習結果":"今日の結果";$("score").textContent=score+"/"+qs.length+"点";$("rinfo").textContent="所要時間 "+fmt(tm);$("wrongs").innerHTML=w.length?"<h2>間違えた問題</h2>":"<p style='text-align:center'>全問正解！</p>";w.forEach(q=>$("wrongs").innerHTML+=`<div class=row><span>${q.x} ${q.o} ${q.y} = <s>${q.g}</s></span><b>${q.a}</b></div>`);$("retry").classList.toggle("hide",!w.length);$("retry").textContent=kind==="boss"?"ボス20問にもう一度挑戦":kind==="review"?"残り"+w.length+"問をもう一度":"間違えた"+w.length+"問をもう一度";
+ if(kind==="normal"){s.total+=qs.length;const date=dk(now);if(!s.dates.includes(date))s.dates.push(date);let st=streak(s),bonus=streakBonus(st),gain=normalGain(score,st);s.xp+=gain;s.clears++;if(s.clears%3===0)s.boss=true;s.hist.push({date,at:now.toISOString(),kind:"normal",score,total:100,time:tm,xp:gain});$("rinfo").textContent+="　獲得EXP +"+gain+(bonus?`（連続ボーナス +${bonus} EXP）`:"")}
+ else if(kind==="review"){s.total+=qs.length;$("rinfo").textContent+="　復習完了（EXP・クリア回数・ボス進行への加算なし）"}
+ else if(kind==="boss"&&score===20){s.boss=false;s.total+=qs.length;s.xp+=100;let tier=Math.min(s.tier,4),part=Math.floor(Math.random()*4),key=tier+"-"+part;s.gear[key]=(s.gear[key]||0)+1;let complete=P.every((_,p)=>s.gear[tier+"-"+p]>0);let msg=T[tier]+"の"+P[part]+"装備 GET！";if(complete&&tier<4){s.tier++;msg+="　"+T[tier]+"装備 COMPLETE！ → "+T[s.tier]+"装備解放！"}else if(complete&&tier===4)msg+="　最高ランク COMPLETE！";$("loot").textContent=msg;$("loot").classList.remove("hide");s.hist.push({date:dk(now),at:now.toISOString(),kind:"boss",score:20,total:20,time:tm})}
+ else if(kind==="boss"){$("rinfo").textContent+="　ボスに逃げられた！ 20問すべて一発正解でもう一度挑戦！"}save(s)}
+function showHist(){hide();$("history").classList.remove("hide");let a=state().hist.slice().reverse();$("hist").innerHTML=a.length?"":"記録はまだありません。";a.forEach(x=>{const date=x&&x.date||"日付不明",score=Number.isFinite(x&&x.score)?x.score:"-",total=Number.isFinite(x&&x.total)?x.total:"-",time=Number.isFinite(x&&x.time)?fmt(x.time):"時間不明";$("hist").innerHTML+=`<div class=row><span>${date} ${x&&x.kind==="boss"?"BOSS":"通常"}</span><b>${score}/${total}　${time}</b></div>`})}
+function showGear(){hide();$("gearbook").classList.remove("hide");let s=state(),z="";
+  T.forEach((t,ti)=>{
+    const unlocked=ti<=s.tier;
+    z+=`<h3>${t}装備 ${ti<s.tier?"✓":ti===s.tier?"←現在":""}</h3><div class=geargrid>`;
+    z+=`<div class=gear>武器<b>${unlocked?"GET":"？"}</b>${unlocked?W[ti]:""}</div>`;
+    P.forEach((p,pi)=>{let n=s.gear[ti+"-"+pi]||0;z+=`<div class=gear>${p}<b>${n?"GET":"？"}</b>${n?"×"+n:""}</div>`});
+    z+="</div>";
+  });
+  $("gear").innerHTML=z
+}
+$("startHot").onclick=()=>begin(100,"normal");$("bossBtn").onclick=()=>begin(20,"boss");document.querySelectorAll(".key").forEach(b=>b.onclick=()=>key(b.dataset.k));
+$("quizBack").onclick=()=>{if(confirm("途中の計算結果は記録されません。\nトップページに戻りますか？")){clearInterval(tick);home()}};$("retry").onclick=()=>{if(kind==="boss")startSession(gen(20),"boss");else{const missed=w.map(({g,...q})=>q);startSession(missed,"review")}};$("historyHot").onclick=showHist;$("gearHot").onclick=showGear;
+$("bossBookHot").onclick=()=>{hide();$("bossbook").classList.remove("hide");let s=state(),wins=s.hist.filter(x=>x.kind==="boss"&&x.score===20).length;$("bossRecord").innerHTML="<b>討伐数："+wins+"体</b>"};
+$("rulesHot").onclick=()=>{hide();$("rulesPage").classList.remove("hide")};document.querySelectorAll(".back").forEach(b=>b.onclick=home);home();if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 </script></body></html>

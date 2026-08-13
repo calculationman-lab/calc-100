@@ -1,1 +1,8 @@
-const C='calc100-v3',A=['./','./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A)).then(()=>self.skipWaiting())));self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+const CACHE="calc-rpg-v9";
+const CORE=["./","./index.html","./manifest.webmanifest","./app-icon.png","./icon-180.png","./icon-192.png","./icon-512.png"];
+const TIERS=["leather","stone","iron","diamond","nether"];
+const PARTS=["weapon","head","body","legs","feet"];
+const ASSETS=CORE.concat(TIERS.flatMap(t=>PARTS.map(p=>`./eq_${t}_${p}.png`)));
+self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
+self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
+self.addEventListener("fetch",event=>{if(event.request.method!=="GET")return;event.respondWith(caches.match(event.request).then(cached=>cached||fetch(event.request).then(response=>{const copy=response.clone();caches.open(CACHE).then(cache=>cache.put(event.request,copy));return response}).catch(()=>caches.match("./index.html"))))});
