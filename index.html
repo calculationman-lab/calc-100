@@ -1,0 +1,74 @@
+<!doctype html><html lang="ja"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>100問計算</title><link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#17202a"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default"><meta name="apple-mobile-web-app-title" content="100問計算">
+<link rel="apple-touch-icon" href="./icon-192.png">
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f6f8;color:#17202a;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans JP",sans-serif}
+main{min-height:100vh;display:grid;place-items:center;padding:20px}.card{width:min(700px,100%);background:white;border-radius:24px;padding:26px;box-shadow:0 10px 35px #0002}
+.top{display:flex;justify-content:space-between;align-items:center;color:#667085;font-weight:700}.pill{background:#eef2f6;border-radius:999px;padding:8px 13px}
+.problem{text-align:center;font-size:clamp(52px,13vw,96px);font-weight:850;margin:45px 0 25px;letter-spacing:.02em}
+input{width:100%;font-size:clamp(38px,10vw,64px);text-align:center;border:3px solid #d0d5dd;border-radius:18px;padding:13px;background:#fff}
+button{width:100%;border:0;border-radius:16px;padding:18px;font-size:21px;font-weight:800;margin-top:14px;background:#17202a;color:white}
+.secondary{background:#e8edf2;color:#17202a}.hint{text-align:center;color:#98a2b3;margin-top:12px}.hidden{display:none}
+.score{text-align:center;font-size:clamp(42px,11vw,72px);font-weight:900;margin:25px 0 5px}.time{text-align:center;font-size:25px;margin-bottom:25px}
+.wrong{border-top:1px solid #e4e7ec;padding:13px 3px;font-size:20px;display:flex;justify-content:space-between}.wrong b{font-size:21px}
+h1{text-align:center}.today{text-align:center;color:#667085;margin-bottom:15px}.note{text-align:center;color:#667085;font-size:14px;line-height:1.6}
+
+.answerDisplay{width:100%;min-height:84px;font-size:clamp(42px,10vw,68px);font-weight:850;text-align:center;border:3px solid #d0d5dd;border-radius:18px;padding:8px;background:#fff;margin-bottom:12px}
+.keypad{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.keypad .key{margin:0;padding:17px 8px;font-size:clamp(24px,6vw,34px);background:#e8edf2;color:#17202a;touch-action:manipulation}
+.keypad .enter{background:#17202a;color:#fff;font-size:20px}
+.keypad .erase{background:#dfe4ea}
+@media (min-width:700px){.keypad .key{padding:20px}}
+</style></head><body><main><section class="card">
+<div id="start"><h1>100問計算</h1><div class="today" id="date"></div>
+<p class="note">足し算50問＋引き算50問。<br>毎日、その日の100問をランダム生成します。</p><button id="startBtn">今日の100問をはじめる</button></div>
+<div id="quiz" class="hidden"><div class="top"><span class="pill" id="progress"></span><span id="timer">0:00</span></div>
+<div class="problem" id="problem"></div><div id="answerDisplay" class="answerDisplay" aria-label="入力した答え">&nbsp;</div>
+<div class="keypad" aria-label="数字入力">
+<button class="key" data-key="7">7</button><button class="key" data-key="8">8</button><button class="key" data-key="9">9</button>
+<button class="key" data-key="4">4</button><button class="key" data-key="5">5</button><button class="key" data-key="6">6</button>
+<button class="key" data-key="1">1</button><button class="key" data-key="2">2</button><button class="key" data-key="3">3</button>
+<button class="key erase" data-key="back">←</button><button class="key" data-key="0">0</button><button class="key enter" data-key="enter">決定</button>
+</div><div class="hint">数字を押して「決定」</div></div>
+<div id="result" class="hidden"><h1>今日の結果</h1><div class="score" id="score"></div><div class="time" id="finalTime"></div>
+<div id="wrongList"></div><button id="retry" class="hidden">間違えた問題をもう一度</button><button id="newRun" class="secondary">もう一度100問</button></div>
+</section></main>
+<script>
+const $=id=>document.getElementById(id); let qs=[],idx=0,wrong=[],startAt=0,tick=null,retryMode=false;
+function seedDate(){let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function rng(seed){let h=2166136261;for(let c of seed){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+function shuffle(a,r=Math.random){for(let i=a.length-1;i;i--){let j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function generate(extra=""){let r=rng(seedDate()+extra),a=[];let used=new Set();
+ while(a.length<50){let x=10+Math.floor(r()*90),y=10+Math.floor(r()*90),k=`+${x},${y}`;if(!used.has(k)){used.add(k);a.push({x,y,op:"+",ans:x+y})}}
+ while(a.length<100){let x=10+Math.floor(r()*90),y=10+Math.floor(r()*90);if(y>x)[x,y]=[y,x];let k=`-${x},${y}`;if(!used.has(k)){used.add(k);a.push({x,y,op:"−",ans:x-y})}}
+ return shuffle(a,r)}
+function fmt(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+"分"+String(s%60).padStart(2,"0")+"秒"}
+function fmtShort(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")}
+function begin(list, retry=false){qs=list;idx=0;wrong=[];retryMode=retry;$("start").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");startAt=Date.now();clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmtShort(Date.now()-startAt),500);show()}
+let entered="";
+function paintAnswer(){$("answerDisplay").textContent=entered||"　"}
+function show(){if(idx>=qs.length)return finish();let q=qs[idx];$("progress").textContent=(idx+1)+" / "+qs.length;$("problem").textContent=q.x+" "+q.op+" "+q.y+" =";entered="";paintAnswer()}
+function submit(){let v=entered;if(v==="")return;let q=qs[idx];if(Number(v)!==q.ans)wrong.push({...q,given:v});idx++;show()}
+function keypress(k){
+ if(k==="back"){entered=entered.slice(0,-1);paintAnswer();return}
+ if(k==="enter"){submit();return}
+ if(entered.length<3){entered+=k;paintAnswer()}
+}
+function finish(){clearInterval(tick);let elapsed=Date.now()-startAt;$("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+ $("score").textContent=(qs.length-wrong.length)+" / "+qs.length+"点";$("finalTime").textContent="所要時間 "+fmt(elapsed);
+ let wl=$("wrongList");wl.innerHTML=wrong.length?'<h2>間違えた問題</h2>':'<p class="note">全問正解！</p>';
+ wrong.forEach(q=>{let div=document.createElement("div");div.className="wrong";div.innerHTML=`<span>${q.x} ${q.op} ${q.y} = <s>${q.given}</s></span><b>${q.ans}</b>`;wl.appendChild(div)});
+ $("retry").classList.toggle("hidden",wrong.length===0);$("retry").textContent="間違えた"+wrong.length+"問をもう一度";
+ if(!retryMode){let hist=JSON.parse(localStorage.getItem("calc100History")||"[]");hist.push({date:seedDate(),score:qs.length-wrong.length,total:qs.length,time:elapsed});localStorage.setItem("calc100History",JSON.stringify(hist.slice(-100)))}
+}
+$("date").textContent=new Date().toLocaleDateString("ja-JP",{year:"numeric",month:"long",day:"numeric"});
+$("startBtn").onclick=()=>begin(generate());
+document.querySelectorAll(".key").forEach(b=>b.addEventListener("click",()=>keypress(b.dataset.key)));
+document.addEventListener("keydown",e=>{if(/^[0-9]$/.test(e.key))keypress(e.key);else if(e.key==="Backspace")keypress("back");else if(e.key==="Enter")keypress("enter")});
+$("retry").onclick=()=>{let list=wrong.map(({given,...q})=>q);begin(shuffle(list),true)};
+$("newRun").onclick=()=>begin(generate(String(Date.now())));
+if("serviceWorker" in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js").catch(()=>{}));
+</script></body></html>
