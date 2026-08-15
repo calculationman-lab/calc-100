@@ -291,124 +291,87 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
 }
 
 
-/* v26 battle scale / spacing / image effect */
-#quiz .battleField{
-  display:flex!important;
-  justify-content:flex-end!important;
-  align-items:flex-end!important;
-  gap:72px!important;
-  padding:12px 30px 12px 20px!important;
-  overflow:hidden!important;
-  position:relative!important;
-}
-#quiz .battleField .enemyHud{display:contents!important}
-#quiz .enemyData{
-  position:absolute!important;
-  left:16px!important;
-  top:12px!important;
-  width:min(330px,34vw)!important;
-  margin:0!important;
-  z-index:7!important;
-  pointer-events:none!important;
-}
-#quiz .battleField .enemyStage{
-  position:relative!important;
-  flex:0 0 auto!important;
-  width:min(41vw,560px)!important;
-  height:min(37dvh,360px)!important;
-  margin:0!important;
-  align-self:flex-end!important;
-}
-#quiz .enemyPortrait{
-  width:100%!important;
-  height:100%!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-}
-#quiz .heroFighter{
-  position:relative!important;
-  flex:0 0 min(28vw,380px)!important;
-  width:min(28vw,380px)!important;
-  height:min(37dvh,360px)!important;
-  margin:0!important;
-  padding:0 0 8px!important;
-  display:flex!important;
-  align-items:flex-end!important;
-  justify-content:center!important;
-  z-index:3!important;
-}
-#quiz .heroFighter img{
-  width:100%!important;
-  height:100%!important;
-  max-height:none!important;
-  object-fit:contain!important;
-  object-position:center bottom!important;
-}
-#quiz .battleFeedback{
-  position:absolute!important;
-  inset:-28% -44%!important;
-  display:grid!important;
-  place-items:center!important;
-  pointer-events:none!important;
-  z-index:8!important;
-}
-#quiz .hitEffectImage{
-  display:block!important;
-  width:180%!important;
-  max-width:none!important;
-  height:160%!important;
-  object-fit:contain!important;
-  opacity:0!important;
-  transform:scale(.72) rotate(-1deg)!important;
-  transform-origin:center!important;
-  filter:drop-shadow(0 0 14px #ff2600cc)!important;
-}
-#quiz .battleFeedback.fire .hitEffectImage{animation:hitImageFlash 430ms ease-out 1!important}
-#quiz .battleFeedback.boss .hitEffectImage{width:195%!important;height:175%!important}
-@keyframes hitImageFlash{
-  0%{opacity:0;transform:scale(.58) rotate(-3deg)}
-  18%{opacity:1;transform:scale(1.06) rotate(0deg)}
-  72%{opacity:1;transform:scale(1) rotate(0deg)}
-  100%{opacity:0;transform:scale(1.08) rotate(1deg)}
-}
-#quiz .slashEffect,#quiz .hitText{display:none!important}
-#quiz .calcConsole .deleteKey,
-#quiz .calcConsole .enter{
-  font-size:clamp(26px,2.5vw,36px)!important;
-  line-height:1.05!important;
-  white-space:nowrap!important;
-}
-#quiz .deleteKey small{
-  font-size:1em!important;
-  line-height:1.05!important;
-  display:inline!important;
-}
+/* v26 character scale, spacing and image-based HIT effect */
+#quiz .battlePage{grid-template-rows:auto minmax(270px,40dvh) minmax(0,1fr)!important}
+#quiz .battleField{display:flex!important;justify-content:flex-end!important;align-items:flex-end!important;gap:clamp(16px,8vw,116px)!important;padding:12px 2vw 10px!important;overflow:hidden!important}
+#quiz .battleField .enemyHud{position:static!important;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;flex:0 0 min(52vw,560px)!important;width:min(52vw,560px)!important;height:100%!important;display:flex!important;flex-direction:column!important;justify-content:flex-end!important;align-items:center!important;pointer-events:none!important}
+#quiz .enemyData{position:absolute!important;left:2%!important;top:12px!important;width:min(310px,28vw)!important;padding:10px 12px!important;z-index:6!important}
+#quiz .battleField .enemyStage{position:relative!important;width:100%!important;height:min(38dvh,360px)!important;margin:0!important;align-self:flex-end!important}
+#quiz .enemyPortrait{object-position:center bottom!important}
+#quiz .heroFighter{position:relative!important;flex:0 0 min(33vw,370px)!important;width:min(33vw,370px)!important;height:100%!important;display:flex!important;align-items:flex-end!important;justify-content:center!important;margin:0!important;padding:0!important;z-index:3!important}
+#quiz .heroFighter img{width:100%!important;max-width:370px!important;max-height:96%!important;object-fit:contain!important;object-position:center bottom!important}
 
-@media (max-width:1180px){
-  #quiz .battleField{gap:48px!important;padding:10px 20px 10px 14px!important}
-  #quiz .enemyData{width:min(290px,36vw)!important;left:12px!important;top:10px!important}
-  #quiz .battleField .enemyStage{width:min(45vw,460px)!important;height:min(33dvh,290px)!important}
-  #quiz .heroFighter{flex-basis:min(31vw,300px)!important;width:min(31vw,300px)!important;height:min(33dvh,290px)!important}
-  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(23px,2.5vw,31px)!important}
-}
+#quiz .battleFeedback{position:absolute!important;inset:-18%!important;pointer-events:none!important;z-index:8!important}
+#quiz .hitImpactImage{position:absolute!important;left:50%!important;top:51%!important;width:150%!important;max-width:none!important;height:auto!important;opacity:0!important;transform:translate(-50%,-50%) scale(.42)!important;filter:drop-shadow(0 0 12px #ff1b00)!important;will-change:transform,opacity!important}
+#quiz .battleFeedback.fire .hitImpactImage{animation:hitImpactImage 420ms ease-out 1!important}
+#quiz .battleFeedback.boss .hitImpactImage{width:165%!important}
+@keyframes hitImpactImage{0%{opacity:0;transform:translate(-50%,-50%) scale(.28)}18%{opacity:1;transform:translate(-50%,-50%) scale(1.08)}74%{opacity:.98;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(-50%,-52%) scale(1.02)}}
 
-@media (orientation:portrait){
-  #quiz .battleField{gap:30px!important;padding:8px 12px 8px 8px!important}
-  #quiz .enemyData{width:min(230px,50vw)!important;left:8px!important;top:7px!important;padding:7px 8px!important}
-  #quiz .battleField .enemyStage{width:min(53vw,310px)!important;height:min(22dvh,220px)!important}
-  #quiz .heroFighter{flex-basis:min(38vw,210px)!important;width:min(38vw,210px)!important;height:min(22dvh,220px)!important;padding-bottom:4px!important}
-  #quiz .battleFeedback{inset:-22% -38%!important}
-  #quiz .hitEffectImage{width:165%!important;height:150%!important}
-  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(19px,3.6vw,26px)!important}
-}
+#quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(22px,2.2vw,30px)!important;white-space:nowrap!important;line-height:1!important}
 
 @media (orientation:landscape) and (max-height:900px){
-  #quiz .battleField{gap:46px!important;padding:8px 18px 8px 12px!important}
-  #quiz .enemyData{width:min(270px,31vw)!important;left:10px!important;top:8px!important;padding:7px 9px!important}
-  #quiz .battleField .enemyStage{width:min(42vw,450px)!important;height:min(28dvh,270px)!important}
-  #quiz .heroFighter{flex-basis:min(28vw,290px)!important;width:min(28vw,290px)!important;height:min(28dvh,270px)!important;padding-bottom:4px!important}
-  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(22px,2.2vw,29px)!important}
+  #quiz .battlePage{grid-template-rows:auto minmax(250px,38dvh) minmax(0,1fr)!important}
+  #quiz .battleField{gap:clamp(16px,8vw,96px)!important;padding:8px 2vw 8px!important}
+  #quiz .battleField .enemyHud{flex-basis:min(52vw,520px)!important;width:min(52vw,520px)!important}
+  #quiz .battleField .enemyStage{height:min(36dvh,320px)!important}
+  #quiz .heroFighter{flex-basis:min(33vw,340px)!important;width:min(33vw,340px)!important}
+  #quiz .heroFighter img{max-width:340px!important}
+  #quiz .enemyData{top:8px!important;width:min(285px,27vw)!important;padding:8px 10px!important}
+  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(20px,2.1vw,28px)!important}
 }
+@media (orientation:portrait){
+  #quiz .battlePage{grid-template-rows:auto minmax(320px,40dvh) minmax(0,1fr)!important}
+  #quiz .battleField{gap:clamp(16px,8vw,72px)!important;padding:10px 2vw 8px!important}
+  #quiz .battleField .enemyHud{flex-basis:min(52vw,430px)!important;width:min(52vw,430px)!important}
+  #quiz .battleField .enemyStage{height:min(34dvh,330px)!important}
+  #quiz .heroFighter{flex-basis:min(33vw,285px)!important;width:min(33vw,285px)!important}
+  #quiz .heroFighter img{max-width:285px!important}
+  #quiz .enemyData{width:min(260px,30vw)!important}
+  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(18px,3.1vw,27px)!important}
+}
+@media (max-width:520px){
+  #quiz .battlePage{grid-template-rows:auto minmax(230px,34dvh) minmax(0,1fr)!important}
+  #quiz .battleField{gap:clamp(12px,7vw,32px)!important;padding:8px 2vw 6px!important}
+  #quiz .battleField .enemyHud{flex-basis:52vw!important;width:52vw!important}
+  #quiz .battleField .enemyStage{height:min(27dvh,230px)!important}
+  #quiz .heroFighter{flex-basis:33vw!important;width:33vw!important}
+  #quiz .enemyData{width:min(190px,42vw)!important;padding:6px 7px!important}
+  #quiz .enemyName{font-size:15px!important}
+  #quiz .enemyHpText{font-size:11px!important}
+  #quiz .calcConsole .deleteKey,#quiz .calcConsole .enter{font-size:clamp(15px,4vw,20px)!important}
+}
+
+
+/* v27 HIT alignment + equipment book images */
+#quiz .battleField .enemyStage{isolation:isolate!important}
+#quiz .enemyPortrait{position:relative!important;z-index:1!important}
+#quiz .battleFeedback{position:absolute!important;inset:0!important;display:grid!important;place-items:center!important;pointer-events:none!important;z-index:8!important}
+#quiz .hitImpactImage{position:relative!important;left:auto!important;top:auto!important;width:84%!important;height:84%!important;max-width:84%!important;max-height:84%!important;object-fit:contain!important;object-position:center!important;opacity:0!important;transform:scale(.42)!important;filter:drop-shadow(0 0 10px #ff1b00)!important;will-change:transform,opacity!important}
+#quiz .battleFeedback.fire .hitImpactImage{animation:hitImpactCentered 420ms ease-out 1!important}
+#quiz .battleFeedback.boss .hitImpactImage{width:86%!important;height:86%!important;max-width:86%!important;max-height:86%!important}
+@keyframes hitImpactCentered{0%{opacity:0;transform:scale(.32)}18%{opacity:1;transform:scale(1.06)}74%{opacity:.98;transform:scale(1)}100%{opacity:0;transform:scale(1.02)}}
+
+#gearbook{overflow:auto}
+#gearbook>h1{color:#ffe28a;text-shadow:2px 3px #000;margin-bottom:18px}
+#gearbook .gearTier{margin:0 0 22px;padding:13px;border:1px solid #9a6a22;border-radius:12px;background:linear-gradient(145deg,#0a2740e8,#031322f2);box-shadow:inset 0 0 0 2px #2e1b04,0 6px 14px #0005}
+#gearbook .gearTier>h3{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 12px;padding:0 2px 9px;border-bottom:1px solid #9a6a22;color:#ffe28a;font-size:22px}
+#gearbook .gearTier>h3 span{font-size:13px;color:#b9d6e9}
+#gearbook .geargrid{display:grid;grid-template-columns:repeat(5,minmax(130px,1fr));gap:11px}
+#gearbook .gear{position:relative;min-width:0;min-height:205px;display:flex;flex-direction:column;align-items:center;margin:0;padding:0 8px 10px;overflow:hidden;border:2px solid #b98731;border-radius:10px;background:linear-gradient(#fff7dc,#d8bd83);color:#2b1a04;text-align:center;box-shadow:inset 0 0 0 1px #fff7c8,0 4px 8px #0006}
+#gearbook .gearPart{width:calc(100% + 16px);margin:0 -8px 7px;padding:7px 4px;background:linear-gradient(#59390a,#281704);color:#fff0bc;font-size:14px;font-weight:900}
+#gearbook .gearImageWrap{position:relative;width:100%;height:104px;display:grid;place-items:center}
+#gearbook .gearImage{display:block;width:92px;height:92px;object-fit:contain;image-rendering:pixelated;filter:drop-shadow(0 5px 4px #0005)}
+#gearbook .gear.missing .gearImage,#gearbook .gear.locked .gearImage{filter:brightness(0) opacity(.36);transform:scale(.92)}
+#gearbook .gearQuestion{display:none;position:absolute;inset:0;place-items:center;color:#fff6ce;font-size:52px;font-weight:900;text-shadow:0 3px #000,0 0 10px #000}
+#gearbook .gear.missing .gearQuestion,#gearbook .gear.locked .gearQuestion{display:grid}
+#gearbook .gearCount{position:absolute;right:5px;bottom:5px;min-width:34px;padding:3px 7px;border:2px solid #fff1a0;border-radius:99px;background:#163e69;color:#fff;font-size:14px;font-weight:900;box-shadow:0 2px 6px #0008}
+#gearbook .gearName{min-height:2.8em;display:flex;align-items:center;justify-content:center;color:#2b1a04;font-size:14px;font-weight:900;line-height:1.35;overflow-wrap:anywhere}
+#gearbook .gearStatus{margin-top:auto;padding:4px 10px;border-radius:99px;background:#267b38;color:#fff;font-size:11px;font-weight:900}
+#gearbook .gear.missing .gearStatus{background:#766c5d;color:#f5f1e8}
+#gearbook .gear.locked .gearStatus{background:#30363b;color:#b8c0c7}
+#gearbook .gear.locked{opacity:.72}
+@media(max-width:900px){#gearbook .geargrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:600px){#gearbook .gearTier{padding:9px}#gearbook .geargrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#gearbook .gear{min-height:185px}#gearbook .gearImageWrap{height:88px}#gearbook .gearImage{width:78px;height:78px}#gearbook .gearName{font-size:12px}}
 
 </style></head><body><main><section class="card">
 <div id="home"><div class="rpgHome">
@@ -433,8 +396,8 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
 </div></div>
 <div id="quiz" class="hide battlePage">
   <header class="battleTop"><div class="battleBrand"><img class="battleLogo" src="./assets/ui/title-logo.webp" alt="100問計算RPG"></div><div class="battleChip"><small>モード</small><b id="mode"></b></div><div class="battleChip progressChip"><small>問題</small><b id="prog"></b></div><div class="battleChip"><small>経過時間</small><b id="timer"></b></div><button id="quizSoundToggle" class="battleTopButton" aria-pressed="true">🔊 ON</button><button id="quizBack" class="battleTopButton">TOPへ戻る</button></header>
-  <section class="battleField"><div id="enemyHud" class="enemyHud"><div class="enemyData"><h2 id="enemyName" class="enemyName"></h2><div class="enemyHpText"><span>HP（残り問題数）</span><span id="enemyHpText"></span></div><div class="enemyHpTrack"><div id="enemyHpFill" class="enemyHpFill"></div></div></div><div id="enemyStage" class="enemyStage"><img id="enemyImage" class="enemyPortrait" alt=""><div id="battleFeedback" class="battleFeedback" aria-hidden="true"><img class="hitEffectImage" src="./assets/ui/hit-effect.webp" alt=""></div></div></div><div id="heroFighter" class="heroFighter"><img id="heroBattleSprite" src="./assets/ui/hero-battle.webp" alt="冒険者"></div></section>
-  <section class="calcConsole"><div id="battleStage" class="battleStage"><div class="problem" id="prob"></div><div class="answerBox"><span>入力中の答え</span><div class="display" id="disp"></div></div></div><div class="keys"><button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button><button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button><button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button><button class="key zero" data-k="0">0</button><button class="key deleteKey" data-k="B">← <small>1文字削除</small></button><button class="key enter" data-k="E">⚔ 決定</button></div></section>
+  <section class="battleField"><div id="enemyHud" class="enemyHud"><div class="enemyData"><h2 id="enemyName" class="enemyName"></h2><div class="enemyHpText"><span>HP（残り問題数）</span><span id="enemyHpText"></span></div><div class="enemyHpTrack"><div id="enemyHpFill" class="enemyHpFill"></div></div></div><div id="enemyStage" class="enemyStage"><img id="enemyImage" class="enemyPortrait" alt=""><div id="battleFeedback" class="battleFeedback" aria-hidden="true"><img class="hitImpactImage" src="./assets/ui/hit-impact.webp" alt=""></div></div></div><div id="heroFighter" class="heroFighter"><img id="heroBattleSprite" src="./assets/ui/hero-battle.webp" alt="冒険者"></div></section>
+  <section class="calcConsole"><div id="battleStage" class="battleStage"><div class="problem" id="prob"></div><div class="answerBox"><span>入力中の答え</span><div class="display" id="disp"></div></div></div><div class="keys"><button class="key" data-k="7">7</button><button class="key" data-k="8">8</button><button class="key" data-k="9">9</button><button class="key" data-k="4">4</button><button class="key" data-k="5">5</button><button class="key" data-k="6">6</button><button class="key" data-k="1">1</button><button class="key" data-k="2">2</button><button class="key" data-k="3">3</button><button class="key zero" data-k="0">0</button><button class="key deleteKey" data-k="B">← 1文字削除</button><button class="key enter" data-k="E">⚔ 決定</button></div></section>
 </div>
 <div id="result" class="hide resultPage"><header class="resultHero"><img src="./assets/ui/hero-home.webp" alt="喜ぶ冒険者"><div><h1>RESULT</h1><p id="rtitle"></p></div></header><section class="resultStats"><div class="resultStat"><h2>⚔ 今回のスコア</h2><div class="score" id="score"></div></div><div class="resultStat"><h2>⏱ かかった時間</h2><strong id="rinfo"></strong></div><div class="resultStat"><h2>★ 獲得EXP</h2><strong id="resultXp">+0 EXP</strong><span id="resultBonus"></span></div></section><div id="loot" class="loot hide"></div><div class="resultBody"><section class="resultSummary"><h2>今日の冒険まとめ</h2><p id="resultLevel"></p><p id="resultRank"></p></section><section id="wrongs" class="wrongPanel"></section></div><nav class="resultActions"><button id="retry" class="hide"></button><button class="secondary back">🏠 TOPへ戻る</button><button id="resultHistory">📜 過去の記録を見る</button></nav></div>
 <div id="history" class="hide"><h1>過去の記録</h1><div id="hist"></div><button class="secondary back">トップへ</button></div>
@@ -464,7 +427,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
   <button class="secondary back">トップへ戻る</button>
 </div>
 </section></main><script>
-const APP_VERSION="v26";
+const APP_VERSION="v27";
 const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];
 const BOSSES=[
   {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./assets/bosses/boss_leather.webp"},
@@ -585,14 +548,29 @@ function finish(now=new Date()){clearInterval(tick);document.body.classList.remo
 function showHist(){hide();$("history").classList.remove("hide");let a=state().hist.slice().reverse();$("hist").innerHTML=a.length?"":"記録はまだありません。";a.forEach(x=>{const date=x&&x.date||"日付不明",score=Number.isFinite(x&&x.score)?x.score:"-",total=Number.isFinite(x&&x.total)?x.total:"-",time=Number.isFinite(x&&x.time)?fmt(x.time):"時間不明",label=x&&x.kind==="boss"?(x.bossName||"BOSS"):"通常";$("hist").innerHTML+=`<div class=row><span>${date} ${label}</span><b>${score}/${total}　${time}</b></div>`})}
 function showBossBook(){hide();$("bossbook").classList.remove("hide");const s=state();$("bossCatalog").innerHTML=BOSSES.map(b=>{const unlocked=b.tier<=s.tier,current=b.tier===s.tier,name=unlocked?b.name:"？？？",status=current?"現在のボス":b.tier<s.tier?"解放済み":"未解放";return `<article class="bossBookEntry ${current?"current":""} ${unlocked?"":"future"}"><img src="${b.image}" alt="${unlocked?b.name:"未解放のボス"}"><h2>${name}</h2><p>${T[b.tier]}ランク</p><p><b>${status}</b></p><p>討伐数：${unlocked?s.bossWins[b.id]:"－"}体</p></article>`}).join("")}
 function showGear(){hide();$("gearbook").classList.remove("hide");let s=state(),z="";
-  T.forEach((t,ti)=>{
-    const unlocked=ti<=s.tier;
-    z+=`<h3>${t}装備 ${ti<s.tier?"✓":ti===s.tier?"←現在":""}</h3><div class=geargrid>`;
-    z+=`<div class=gear>武器<b>${unlocked?"GET":"？"}</b>${unlocked?W[ti]:""}</div>`;
-    P.forEach((p,pi)=>{let n=s.gear[ti+"-"+pi]||0;z+=`<div class=gear>${p}<b>${n?"GET":"？"}</b>${n?"×"+n:""}</div>`});
-    z+="</div>";
+  T.forEach((tierName,ti)=>{
+    const tierUnlocked=ti<=s.tier;
+    const tierMark=ti<s.tier?"✓ COMPLETE":ti===s.tier?"← 現在のランク":"未解放";
+    z+=`<section class="gearTier ${tierUnlocked?"unlocked":"locked"}"><h3>${tierName}装備 <span>${tierMark}</span></h3><div class="geargrid">`;
+
+    const weaponSrc=`./assets/equipment/eq_${TK[ti]}_weapon.png`;
+    z+=gearBookCard({label:"武器",name:W[ti],src:weaponSrc,owned:tierUnlocked,count:1,tierUnlocked});
+
+    PK.forEach((part,pi)=>{
+      const count=s.gear[ti+"-"+pi]||0;
+      const owned=tierUnlocked&&count>0;
+      const src=`./assets/equipment/eq_${TK[ti]}_${part}.png`;
+      z+=gearBookCard({label:P[pi],name:eqName(ti,part),src,owned,count,tierUnlocked});
+    });
+    z+="</div></section>";
   });
   $("gear").innerHTML=z
+}
+function gearBookCard({label,name,src,owned,count,tierUnlocked}){
+  const stateClass=owned?"owned":tierUnlocked?"missing":"locked";
+  const status=owned?"所持中":tierUnlocked?"未入手":"未解放";
+  const countBadge=owned&&count>1?`<span class="gearCount">×${count}</span>`:"";
+  return `<article class="gear ${stateClass}"><div class="gearPart">${label}</div><div class="gearImageWrap"><img class="gearImage" src="${src}" alt="${owned?name:"未入手の装備"}">${countBadge}<span class="gearQuestion">？</span></div><div class="gearName">${tierUnlocked?name:"？？？"}</div><div class="gearStatus">${status}</div></article>`
 }
 $("startHot").onclick=()=>begin(100,"normal");$("bossBtn").onclick=()=>begin(20,"boss");document.querySelectorAll(".key").forEach(b=>b.onclick=()=>key(b.dataset.k));
 $("quizBack").onclick=()=>{if(confirm("途中の計算結果は記録されません。\nトップページに戻りますか？")){clearInterval(tick);home()}};$("retry").onclick=()=>{if(kind==="boss")startSession(gen(20),"boss");else{const missed=w.map(({g,...q})=>q);startSession(missed,"review")}};$("historyHot").onclick=showHist;$("gearHot").onclick=showGear;
