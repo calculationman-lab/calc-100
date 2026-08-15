@@ -121,6 +121,77 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
 
 @media(max-width:1040px){.battleField{justify-content:flex-end!important;padding-right:3.5%!important}.battleField .enemyHud{left:50%!important;transform:translateX(-50%)!important;width:min(470px,58%)!important}.battleField .enemyStage{margin:0 auto!important}}
 @media(max-width:768px){.heroPortrait{width:min(66%,250px)!important;max-height:268px!important;transform:translateY(-18px)!important}.battleField{justify-content:space-between!important;padding-right:10px!important}.battleField .enemyHud{position:absolute!important;left:46%!important;transform:translateX(-50%)!important;width:min(62vw,250px)!important}.battleField .enemyStage{width:min(46vw,205px)!important;height:min(18dvh,160px)!important}.heroFighter{width:34%!important;margin-right:0!important}.heroFighter img{width:min(100%,180px)!important}}
+
+/* v24 layout stabilization overrides */
+.heroPanel{padding:16px 18px 8px!important;background:linear-gradient(180deg,#2281d6 0%,#0f5ca0 24%,#083660 58%,#041628 100%)!important}
+.gameLogo{width:min(94%,520px)!important;margin:0 auto 8px!important}
+.tagline{margin:10px 0 0!important}
+.heroPortrait{width:min(64%,300px)!important;max-height:290px!important;align-self:end!important;transform:translateY(12px)!important;margin-top:8px!important}
+
+#quiz .battlePage{grid-template-rows:auto minmax(220px,34dvh) minmax(0,1fr)!important;min-height:calc(100dvh - 36px)!important;height:calc(100dvh - 36px)!important}
+#quiz .battleTop{grid-template-columns:minmax(250px,1.25fr) repeat(3,minmax(150px,.9fr)) auto auto!important;gap:10px!important;padding:9px 12px!important}
+#quiz .battleLogo{width:min(100%,295px)!important}
+#quiz .battleBrand{justify-content:flex-start!important}
+#quiz .battleChip{min-height:72px!important}
+#quiz .battleField{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(210px,250px)!important;align-items:end!important;justify-content:initial!important;gap:12px!important;padding:12px 18px 8px!important;overflow:hidden!important;background:url('./assets/ui/battle-bg-clean.webp') center center/cover no-repeat!important}
+#quiz .battleField .enemyHud{position:relative!important;left:auto!important;top:auto!important;bottom:auto!important;transform:none!important;width:100%!important;height:100%!important;display:grid!important;grid-template-columns:minmax(240px,300px) 1fr!important;grid-template-rows:auto 1fr!important;align-items:end!important;justify-items:start!important;pointer-events:none!important}
+#quiz .enemyData{position:relative!important;left:auto!important;top:auto!important;grid-column:1!important;grid-row:1!important;width:min(300px,94%)!important;padding:11px 12px!important;margin:0 0 4px 0!important;z-index:3!important}
+#quiz .enemyName{font-size:22px!important}
+#quiz .enemyHpText{font-size:15px!important}
+#quiz .battleField .enemyStage{grid-column:1 / span 2!important;grid-row:2!important;justify-self:center!important;align-self:end!important;width:min(33vw,360px)!important;height:min(24dvh,240px)!important;margin:0 auto!important}
+#quiz .enemyPortrait{object-position:center bottom!important}
+#quiz .heroFighter{width:100%!important;height:100%!important;justify-content:flex-start!important;align-items:flex-end!important;margin-right:0!important;padding:0 0 0 4px!important}
+#quiz .heroFighter img{width:min(100%,240px)!important;max-height:92%!important;object-position:center bottom!important}
+
+#quiz .calcConsole{padding:10px 1.3%!important}
+#quiz .calcConsole .battleStage{grid-template-columns:2.15fr .95fr!important;gap:12px!important}
+#quiz .calcConsole .problem{min-height:108px!important;font-size:clamp(60px,6.1vw,92px)!important}
+#quiz .answerBox span{font-size:24px!important}
+#quiz .calcConsole .display{min-height:68px!important;font-size:clamp(44px,4.8vw,72px)!important}
+#quiz .keys{gap:9px!important;margin-top:10px!important}
+#quiz .calcConsole .key{font-size:clamp(40px,4.1vw,50px)!important;padding:8px 10px!important}
+#quiz .calcConsole .deleteKey{font-size:clamp(24px,2.4vw,32px)!important}
+#quiz .deleteKey small{font-size:clamp(15px,1.55vw,19px)!important}
+#quiz .calcConsole .enter{font-size:clamp(31px,2.7vw,38px)!important}
+
+@media (max-width:1180px){
+  #quiz .battleTop{grid-template-columns:minmax(215px,1.15fr) repeat(3,minmax(126px,.85fr)) auto auto!important}
+  #quiz .battleLogo{width:min(100%,260px)!important}
+  #quiz .battleField{grid-template-columns:minmax(0,1fr) minmax(175px,220px)!important;padding:10px 12px 6px!important}
+  #quiz .battleField .enemyHud{grid-template-columns:minmax(210px,260px) 1fr!important}
+  #quiz .enemyData{width:min(260px,94%)!important;padding:10px!important}
+  #quiz .enemyName{font-size:19px!important}
+  #quiz .enemyHpText{font-size:13px!important}
+  #quiz .battleField .enemyStage{width:min(35vw,300px)!important;height:min(22dvh,210px)!important}
+  #quiz .heroFighter img{width:min(100%,190px)!important}
+  #quiz .calcConsole .problem{min-height:96px!important;font-size:clamp(52px,5.8vw,80px)!important}
+  #quiz .answerBox span{font-size:20px!important}
+  #quiz .calcConsole .display{min-height:58px!important;font-size:clamp(38px,4vw,60px)!important}
+  #quiz .calcConsole .key{font-size:clamp(34px,3.8vw,44px)!important}
+  #quiz .calcConsole .deleteKey{font-size:clamp(21px,2.2vw,28px)!important}
+  #quiz .deleteKey small{font-size:clamp(13px,1.3vw,17px)!important}
+  #quiz .calcConsole .enter{font-size:clamp(26px,2.4vw,34px)!important}
+}
+@media (orientation:portrait){
+  #quiz .battlePage{grid-template-rows:auto minmax(210px,30dvh) minmax(0,1fr)!important}
+  #quiz .battleTop{grid-template-columns:repeat(2,1fr)!important}
+  #quiz .battleBrand{grid-column:1 / -1!important;justify-content:center!important}
+  #quiz .battleTopButton{padding:10px 8px!important}
+  #quiz .battleField{grid-template-columns:1fr 170px!important;padding:10px 10px 6px!important}
+  #quiz .battleField .enemyHud{grid-template-columns:minmax(170px,220px) 1fr!important}
+  #quiz .enemyData{width:min(220px,92%)!important}
+  #quiz .battleField .enemyStage{width:min(44vw,240px)!important;height:min(18dvh,160px)!important}
+  #quiz .heroFighter img{width:min(100%,150px)!important}
+  #quiz .calcConsole .battleStage{grid-template-columns:1.75fr .95fr!important;gap:8px!important}
+  #quiz .calcConsole .problem{min-height:78px!important;font-size:clamp(40px,7.2vw,60px)!important}
+  #quiz .answerBox span{font-size:17px!important}
+  #quiz .calcConsole .display{min-height:50px!important;font-size:clamp(30px,5.8vw,46px)!important}
+  #quiz .calcConsole .key{font-size:clamp(28px,5vw,36px)!important;padding:6px 8px!important}
+  #quiz .calcConsole .deleteKey{font-size:clamp(17px,3vw,22px)!important}
+  #quiz .deleteKey small{font-size:clamp(11px,2vw,14px)!important}
+  #quiz .calcConsole .enter{font-size:clamp(22px,3.2vw,28px)!important}
+}
+
 </style></head><body><main><section class="card">
 <div id="home"><div class="rpgHome">
   <div class="rpgGrid">
@@ -175,7 +246,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
   <button class="secondary back">トップへ戻る</button>
 </div>
 </section></main><script>
-const APP_VERSION="v23";
+const APP_VERSION="v24";
 const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];
 const BOSSES=[
   {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./assets/bosses/boss_leather.webp"},
