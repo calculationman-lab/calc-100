@@ -1,4 +1,4 @@
-const CACHE="calc-rpg-v21";
+const CACHE="calc-rpg-v22";
 const CORE=["./","./index.html","./manifest.webmanifest","./icon-180.png","./icon-192.png","./icon-512.png"];
 const TIERS=["leather","stone","iron","diamond","nether"];
 const PARTS=["weapon","head","body","legs","feet"];

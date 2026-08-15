@@ -90,34 +90,34 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
 @media(max-height:920px) and (min-width:900px){.battlePage{grid-template-rows:auto minmax(180px,31dvh) minmax(0,1fr)}.battleTop{grid-template-columns:1.25fr .9fr .9fr .9fr auto auto;padding:8px 10px}.battleChip{min-height:58px}.battleTopButton{padding:10px 12px!important}.battleField{padding:10px 16px 4px}.battleField .enemyHud{width:49%}.enemyData{width:min(300px,84%);padding:9px}.enemyName{font-size:19px}.battleField .enemyStage{width:min(31vw,285px);height:min(22dvh,210px);margin:0}.heroFighter{width:29%}.heroFighter img{max-height:100%}.calcConsole{padding:8px 1.1%}.calcConsole .battleStage{grid-template-columns:1.65fr .8fr;gap:10px}.calcConsole .problem{min-height:64px;font-size:42px}.calcConsole .display{min-height:46px;font-size:30px}.calcConsole .keys{gap:6px;margin-top:8px;grid-template-rows:repeat(4,minmax(40px,1fr))}.calcConsole .key{font-size:24px;padding:5px}.calcConsole .deleteKey,.calcConsole .enter{font-size:17px}.deleteKey small{display:none}.resultHero{min-height:140px}.resultStat{min-height:130px}}
 @media(prefers-reduced-motion:reduce){.battleFeedback.fire .slashEffect,.battleFeedback.fire .hitText,.battleStage.shake,.battleStage.bossShake{animation-duration:1ms}}
 
-/* v21 refinements */
+/* v22 refinements */
 .heroPanel{background:url("./assets/ui/top-hero-bg.webp") center center/cover no-repeat!important;padding:18px 18px 0!important;grid-template-rows:auto auto minmax(0,1fr)!important;isolation:isolate}
-.heroPanel::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#04162b80 0%,#05182cb3 34%,#04172fd9 74%,#041220f2 100%);z-index:0}
+.heroPanel::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#08233d18 0%,#0a284340 34%,#08223d78 74%,#06182db2 100%);z-index:0}
 .heroPanel>*{position:relative;z-index:1}
 .heroPanel:after{height:22%!important;background:linear-gradient(transparent,#04111dd9 72%,#04111d)!important}
 .gameLogo{width:min(92%,530px)!important;margin:4px auto 4px!important}
-.tagline{margin:10px 0 0!important;padding:9px 28px!important;font-size:18px!important;background:#062341e3!important}
+.tagline{margin:10px 0 0!important;padding:9px 28px!important;font-size:18px!important;background:#062341bf!important}
 .heroPortrait{width:min(58%,285px)!important;max-height:300px!important;margin-top:14px!important}
 .battleTop{grid-template-columns:minmax(300px,1.5fr) repeat(3,minmax(146px,.9fr)) auto auto!important;gap:10px!important;padding:9px 12px!important}
 .battleBrand{display:flex!important;align-items:center!important;justify-content:flex-start!important;padding:0 4px!important}
 .battleLogo{display:block;width:min(100%,355px);height:auto;filter:drop-shadow(0 6px 10px #000a)}
-.battleChip{min-height:76px!important;padding:10px 12px!important}
-.battleChip small{font-size:13px!important}.battleChip b{font-size:clamp(18px,2vw,32px)!important}
-.battleTopButton{font-size:19px!important;padding:12px 16px!important}
+.battleChip{min-height:78px!important;padding:10px 12px!important}
+.battleChip small{font-size:14px!important}.battleChip b{font-size:clamp(20px,2.15vw,34px)!important}
+.battleTopButton{font-size:20px!important;padding:12px 16px!important}
 .calcConsole .battleStage{grid-template-columns:1.95fr .85fr!important;gap:12px!important}
 .calcConsole .problem{min-height:116px!important;font-size:clamp(58px,7.6vw,96px)!important}
-.answerBox{padding:12px!important}.answerBox span{font-size:21px!important}.calcConsole .display{min-height:72px!important;font-size:clamp(42px,5.4vw,72px)!important}
-.calcConsole .keys{gap:9px!important;margin-top:12px!important;grid-template-rows:repeat(4,minmax(56px,1fr))!important}
-.calcConsole .key{font-size:38px!important;padding:10px 8px!important}
-.calcConsole .deleteKey,.calcConsole .enter{font-size:24px!important}
-.deleteKey small{font-size:15px!important}
+.answerBox{padding:12px!important}.answerBox span{font-size:24px!important}.calcConsole .display{min-height:76px!important;font-size:clamp(48px,5.8vw,76px)!important}
+.calcConsole .keys{gap:10px!important;margin-top:12px!important;grid-template-rows:repeat(4,minmax(60px,1fr))!important}
+.calcConsole .key{font-size:clamp(40px,3.4vw,50px)!important;padding:10px 8px!important}
+.calcConsole .deleteKey,.calcConsole .enter{font-size:clamp(27px,2.2vw,34px)!important}
+.deleteKey small{font-size:17px!important}
 .heroFighter.attacking img{animation:heroLunge 220ms ease-out 1}
 .heroFighter.bossAttacking img{animation:heroLungeBoss 240ms ease-out 1}
-@keyframes heroLunge{0%{transform:translateX(0)}34%{transform:translateX(-68px)}100%{transform:translateX(0)}}
-@keyframes heroLungeBoss{0%{transform:translateX(0)}34%{transform:translateX(-78px)}100%{transform:translateX(0)}}
-@media(max-width:1100px){.battleTop{grid-template-columns:1fr repeat(3,minmax(120px,.75fr)) auto auto!important}.battleLogo{width:min(100%,300px)}.battleChip{min-height:70px!important}.calcConsole .problem{font-size:clamp(52px,7vw,84px)!important}.calcConsole .display{font-size:clamp(38px,5vw,60px)!important}.calcConsole .key{font-size:34px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:21px!important}}
-@media(max-height:920px) and (min-width:900px){.battlePage{grid-template-rows:auto minmax(160px,27dvh) minmax(0,1fr)!important}.battleTop{grid-template-columns:minmax(250px,1.25fr) repeat(3,minmax(126px,.83fr)) auto auto!important;padding:7px 10px!important}.battleLogo{width:min(100%,290px)!important}.battleChip{min-height:64px!important;padding:8px 10px!important}.battleChip small{font-size:12px!important}.battleChip b{font-size:clamp(18px,1.8vw,28px)!important}.battleTopButton{padding:10px 12px!important;font-size:17px!important}.battleField{padding:8px 14px 4px!important}.enemyData{width:min(310px,85%)!important;padding:9px!important}.enemyName{font-size:20px!important}.enemyHpText{font-size:14px!important}.battleField .enemyStage{width:min(34vw,290px)!important;height:min(21dvh,215px)!important}.heroFighter{width:30%!important}.calcConsole{padding:8px 1.1%!important}.calcConsole .battleStage{grid-template-columns:1.78fr .82fr!important;gap:10px!important}.calcConsole .problem{min-height:72px!important;font-size:52px!important}.answerBox span{font-size:18px!important}.calcConsole .display{min-height:52px!important;font-size:36px!important}.calcConsole .keys{gap:6px!important;margin-top:8px!important;grid-template-rows:repeat(4,minmax(44px,1fr))!important}.calcConsole .key{font-size:28px!important;padding:6px 5px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:19px!important}.deleteKey small{font-size:12px!important;display:inline!important}}
-@media(max-width:768px){.heroPortrait{width:min(64%,250px)!important;max-height:250px!important}.battleTop{grid-template-columns:repeat(3,1fr)!important;padding:6px!important}.battleBrand{grid-column:1/-1!important;justify-content:center!important}.battleLogo{width:min(88vw,280px)!important}.battleChip{min-height:54px!important;padding:4px!important}.battleChip b{font-size:24px!important}.battleTopButton{padding:8px!important;font-size:14px!important}.battleField{padding:10px 10px 6px!important}.battleField .enemyHud{width:53%!important}.battleField .enemyStage{width:min(43vw,190px)!important;height:min(18dvh,150px)!important}.heroFighter{width:38%!important}.calcConsole{padding:7px!important}.calcConsole .problem{min-height:82px!important;font-size:46px!important}.answerBox span{font-size:18px!important}.calcConsole .display{min-height:54px!important;font-size:38px!important}.calcConsole .keys{gap:5px!important;grid-template-rows:repeat(4,minmax(48px,1fr))!important}.calcConsole .key{font-size:28px!important;padding:6px 4px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:18px!important}}
+@keyframes heroLunge{0%{transform:translateX(0)}34%{transform:translateX(-136px)}100%{transform:translateX(0)}}
+@keyframes heroLungeBoss{0%{transform:translateX(0)}34%{transform:translateX(-156px)}100%{transform:translateX(0)}}
+@media(max-width:1100px){.battleTop{grid-template-columns:1fr repeat(3,minmax(120px,.75fr)) auto auto!important}.battleLogo{width:min(100%,300px)}.battleChip{min-height:72px!important}.calcConsole .problem{font-size:clamp(54px,7.2vw,86px)!important}.calcConsole .display{font-size:clamp(42px,5.3vw,64px)!important}.calcConsole .key{font-size:36px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:24px!important}.deleteKey small{font-size:15px!important}}
+@media(max-height:920px) and (min-width:900px){.battlePage{grid-template-rows:auto minmax(160px,27dvh) minmax(0,1fr)!important}.battleTop{grid-template-columns:minmax(250px,1.25fr) repeat(3,minmax(126px,.83fr)) auto auto!important;padding:7px 10px!important}.battleLogo{width:min(100%,290px)!important}.battleChip{min-height:66px!important;padding:8px 10px!important}.battleChip small{font-size:13px!important}.battleChip b{font-size:clamp(20px,1.9vw,30px)!important}.battleTopButton{padding:10px 12px!important;font-size:18px!important}.battleField{padding:8px 14px 4px!important}.enemyData{width:min(310px,85%)!important;padding:9px!important}.enemyName{font-size:20px!important}.enemyHpText{font-size:14px!important}.battleField .enemyStage{width:min(34vw,290px)!important;height:min(21dvh,215px)!important}.heroFighter{width:30%!important}.calcConsole{padding:8px 1.1%!important}.calcConsole .battleStage{grid-template-columns:1.78fr .82fr!important;gap:10px!important}.calcConsole .problem{min-height:76px!important;font-size:56px!important}.answerBox span{font-size:20px!important}.calcConsole .display{min-height:56px!important;font-size:40px!important}.calcConsole .keys{gap:7px!important;margin-top:8px!important;grid-template-rows:repeat(4,minmax(48px,1fr))!important}.calcConsole .key{font-size:34px!important;padding:7px 5px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:23px!important}.deleteKey small{font-size:14px!important;display:inline!important}}
+@media(max-width:768px){.heroPortrait{width:min(64%,250px)!important;max-height:250px!important}.battleTop{grid-template-columns:repeat(3,1fr)!important;padding:6px!important}.battleBrand{grid-column:1/-1!important;justify-content:center!important}.battleLogo{width:min(88vw,280px)!important}.battleChip{min-height:56px!important;padding:4px!important}.battleChip b{font-size:24px!important}.battleTopButton{padding:8px!important;font-size:14px!important}.battleField{padding:10px 10px 6px!important}.battleField .enemyHud{width:53%!important}.battleField .enemyStage{width:min(43vw,190px)!important;height:min(18dvh,150px)!important}.heroFighter{width:38%!important}.calcConsole{padding:7px!important}.calcConsole .problem{min-height:84px!important;font-size:48px!important}.answerBox span{font-size:19px!important}.calcConsole .display{min-height:56px!important;font-size:40px!important}.calcConsole .keys{gap:6px!important;grid-template-rows:repeat(4,minmax(50px,1fr))!important}.calcConsole .key{font-size:30px!important;padding:7px 4px!important}.calcConsole .deleteKey,.calcConsole .enter{font-size:20px!important}.deleteKey small{font-size:13px!important}}
 </style></head><body><main><section class="card">
 <div id="home"><div class="rpgHome">
   <div class="rpgGrid">
@@ -172,7 +172,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
   <button class="secondary back">トップへ戻る</button>
 </div>
 </section></main><script>
-const APP_VERSION="v21";
+const APP_VERSION="v22";
 const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];
 const BOSSES=[
   {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./assets/bosses/boss_leather.webp"},
