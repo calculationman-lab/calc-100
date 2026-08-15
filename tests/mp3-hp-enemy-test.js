@@ -24,7 +24,7 @@ test("ボス完了時HP 0/20",()=>{const h=createHarness({tier:1,boss:true});h.r
 
 test("通常敵を1体選びセッション中固定",()=>{const h=createHarness();h.context.startSession(questions(100),"normal");const before=h.nodes.get("enemyName").textContent;assert(h.run("ENEMIES.some(e=>e.name===activeEnemy.name)"),"通常敵");h.run('v=String(qs[0].a);key("E")');assert(h.nodes.get("enemyName").textContent===before,"固定")});
 test("tier対応ボス名と画像",()=>{const h=createHarness({tier:2,boss:true});h.run('activeBoss={...bossForTier(2)}');h.context.startSession(questions(20),"boss");assert(h.nodes.get("enemyName").textContent==="黒鉄の騎士"&&h.nodes.get("enemyImage").src.endsWith("boss_iron.png"),"tier boss")});
-test("Service WorkerにMP3と敵画像",()=>{const sw=fs.readFileSync(path.resolve(__dirname,"..","sw.js"),"utf8");assert(sw.includes('assets/sounds/digit.mp3')&&sw.includes('assets/sounds/confirm.mp3')&&sw.includes('ENEMY_ASSETS')&&sw.includes('calc-rpg-v13'),"SW")});
+test("Service WorkerにMP3と敵画像",()=>{const sw=fs.readFileSync(path.resolve(__dirname,"..","sw.js"),"utf8");assert(sw.includes('assets/sounds/digit.mp3')&&sw.includes('assets/sounds/confirm.mp3')&&sw.includes('ENEMY_ASSETS'),"SW")});
 
 const total=passed+failures.length;
 if(failures.length){console.error(`MP3/HP/enemy tests: ${passed}/${total} passed`);failures.forEach(f=>console.error(`FAIL ${f}`));process.exit(1)}

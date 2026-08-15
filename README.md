@@ -1,5 +1,7 @@
 # 100問計算RPG 機能最終回帰テスト版
 
+現在のアプリバージョン：**v15**
+
 GitHub Pagesへフォルダー内のファイルをそのまま配置できます。サーバー、API、ビルド作業は不要です。
 
 ## 主な変更
@@ -28,6 +30,9 @@ GitHub Pagesへフォルダー内のファイルをそのまま配置できま�
 - 通常敵5体と、問題進行に連動して減る敵HPバーを計算画面へ追加
 - ボス戦では装備tier対応の既存ボス画像・名前を計算画面へ表示
 - Service Workerキャッシュを `calc-rpg-v13` に更新し、MP3と通常敵画像をオフライン対象へ追加
+- TOP最下部へ`100問計算RPG v14`を常時表示し、`APP_VERSION`とService Workerをv14へ統一
+- 斬撃・HITを敵画像へ重ね、赤色化、約3倍に大型化、表示時間を140msから420msへ延長
+- TOP表示、`APP_VERSION`、Service Workerをv15へ統一
 
 ## 操作音・戦闘演出
 
@@ -122,6 +127,8 @@ node tests/boss-tier-test.js
 node tests/sound-effects-test.js
 node tests/sound-pressure-test.js
 node tests/mp3-hp-enemy-test.js
+node tests/version-test.js
+node tests/slash-effect-v15-test.js
 ```
 
 回帰テストはEXP・レベル境界、連続ボーナス、復習、ボス、全防具ドロップ、重複、全ランク解放、日次完了、履歴、途中離脱、旧セーブ互換を検証します。ボスランク試験は5体の対応、討伐記録、失敗時非加算、戦闘開始時固定、ランクアップ表示、図鑑を検証します。音・演出試験は初期設定、保存、各キーの音ルート、OFF時のAudio非生成、正誤同一音、DOM再利用を検証します。音圧試験は相対Gain、3層構成、Master/Compressor、OFF、review、正誤同一プロファイル、非同期非待機を検証します。MP3・HP・敵試験は指定音源経路、二重再生防止、fallback、pool、HP境界、通常敵固定、tierボス、v13キャッシュを検証します。
