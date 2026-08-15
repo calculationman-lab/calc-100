@@ -69,7 +69,7 @@ for (const id of ["startHot", "historyHot", "gearHot", "bossBookHot", "rulesHot"
   assert(typeof nodes.get(id).onclick === "function", `${id}のクリック処理がありません`);
 }
 nodes.get("startHot").onclick();
-assert(nodes.get("prog").textContent === "1/100", "通常100問を開始できません");
+assert(nodes.get("prog").textContent === "1 / 100問", "通常100問を開始できません");
 assert(nodes.get("prob").textContent.includes("="), "問題表示に失敗しました");
 
 store.set("calcRPG", JSON.stringify({ xp: 0, clears: 0, boss: false, tier: 0, gear: {}, hist: [], dates: [], total: 0 }));

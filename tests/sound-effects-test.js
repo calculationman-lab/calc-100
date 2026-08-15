@@ -17,7 +17,7 @@ test("boss音ルート",()=>{const h=spyHarness();h.run('kind="boss";v="";key("1
 test("reviewはnormal音ルート",()=>{const h=spyHarness();h.run('kind="review";v="";key("1")');assert(h.run('soundCalls[0][1]')==="normal","review")});
 test("OFF時はAudio生成なし",()=>{const h=createHarness(null,{soundEnabled:false});h.run('audioCreations=0;globalThis.AudioContext=function(){audioCreations++;this.state="running"};soundManager.playDigit("normal");soundManager.playConfirm("boss");soundManager.playBackspace()');assert(h.run("audioCreations")===0&&h.run("soundManager.createdContexts")===0,"生成された")});
 test("正誤で決定音は同一",()=>{const h=spyHarness();h.run('kind="normal";qs=[{x:10,y:10,o:"+",a:20},{x:11,y:10,o:"+",a:21},{x:12,y:10,o:"+",a:22}];i=0;w=[];v="20";key("E");v="99";key("E")');assert(h.run('JSON.stringify(soundCalls)')==='[["confirm","normal"],["confirm","normal"]]',"音差分")});
-test("エフェクトDOMを再利用",()=>{const h=spyHarness();h.run('kind="normal";v="";key("1");key("2")');assert(h.nodes.get("battleFeedback").classList.contains("fire"),"斬撃");h.run('qs=[{x:10,y:10,o:"+",a:20},{x:11,y:10,o:"+",a:21}];i=0;v="20";key("E")');assert(h.nodes.get("battleStage").classList.contains("shake"),"揺れ")});
+test("斬撃は決定時だけ",()=>{const h=spyHarness();h.run('kind="normal";v="";key("1");key("2")');assert(!h.nodes.has("battleFeedback")||!h.nodes.get("battleFeedback").classList.contains("fire"),"数字で斬撃");h.run('qs=[{x:10,y:10,o:"+",a:20},{x:11,y:10,o:"+",a:21}];i=0;v="20";key("E")');assert(h.nodes.get("battleFeedback").classList.contains("fire")&&h.nodes.get("battleStage").classList.contains("shake"),"決定演出")});
 
 const total=passed+failures.length;
 if(failures.length){console.error(`Sound/effect tests: ${passed}/${total} passed`);failures.forEach(f=>console.error(`FAIL ${f}`));process.exit(1)}
