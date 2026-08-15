@@ -1,11 +1,11 @@
-const CACHE="calc-rpg-v17";
+const CACHE="calc-rpg-v18";
 const CORE=["./","./index.html","./manifest.webmanifest","./app-icon.png","./icon-180.png","./icon-192.png","./icon-512.png"];
 const TIERS=["leather","stone","iron","diamond","nether"];
 const PARTS=["weapon","head","body","legs","feet"];
 const BOSS_ASSETS=TIERS.map(t=>`./assets/bosses/boss_${t}.png`);
 const ENEMY_ASSETS=["slime","goblin","wolf","bat","mushroom"].map(e=>`./assets/enemies/enemy_${e}.png`);
 const SOUND_ASSETS=["./assets/sounds/digit.mp3","./assets/sounds/confirm.mp3"];
-const UI_ASSETS=["./assets/ui/home-backdrop.webp","./assets/ui/battle-backdrop.webp","./assets/ui/result-backdrop.webp","./assets/ui/hero-scene.webp"];
+const UI_ASSETS=["./assets/ui/home-backdrop.webp","./assets/ui/battle-backdrop.webp","./assets/ui/result-backdrop.webp","./assets/ui/hero-scene.webp","./assets/ui/hero-home.png","./assets/ui/hero-battle.png"];
 const ASSETS=CORE.concat(TIERS.flatMap(t=>PARTS.map(p=>`./eq_${t}_${p}.png`)),BOSS_ASSETS,ENEMY_ASSETS,SOUND_ASSETS,UI_ASSETS);
 self.addEventListener("install",event=>event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)).then(()=>self.skipWaiting())));
 self.addEventListener("activate",event=>event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(key=>key!==CACHE).map(key=>caches.delete(key)))).then(()=>self.clients.claim())));
