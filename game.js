@@ -1,21 +1,21 @@
-/* v30: v28 rules and storage; UI hooks only. */
-const APP_VERSION="v30";
+/* v31: v28 rules and storage; UI hooks only. */
+const APP_VERSION="v31";
 const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];
 const BOSSES=[
-  {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./assets/bosses/boss_leather.webp"},
-  {id:"rock_golem",tier:1,name:"岩石ゴーレム",image:"./assets/bosses/boss_stone.webp"},
-  {id:"black_iron_knight",tier:2,name:"黒鉄の騎士",image:"./assets/bosses/boss_iron.webp"},
-  {id:"azure_crystal_dragon",tier:3,name:"蒼晶のドラゴン",image:"./assets/bosses/boss_diamond.webp"},
-  {id:"nether_demon_king",tier:4,name:"冥界の魔王",image:"./assets/bosses/boss_nether.webp"}
+  {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./boss_leather.webp"},
+  {id:"rock_golem",tier:1,name:"岩石ゴーレム",image:"./boss_stone.webp"},
+  {id:"black_iron_knight",tier:2,name:"黒鉄の騎士",image:"./boss_iron.webp"},
+  {id:"azure_crystal_dragon",tier:3,name:"蒼晶のドラゴン",image:"./boss_diamond.webp"},
+  {id:"nether_demon_king",tier:4,name:"冥界の魔王",image:"./boss_nether.webp"}
 ];
 const ENEMIES=[
-  {id:"slime",name:"アクアスライム",image:"./assets/enemies/enemy_slime.webp"},
-  {id:"goblin",name:"森のゴブリン",image:"./assets/enemies/enemy_goblin.webp"},
-  {id:"wolf",name:"シルバーウルフ",image:"./assets/enemies/enemy_wolf.webp"},
-  {id:"bat",name:"ナイトバット",image:"./assets/enemies/enemy_bat.webp"},
-  {id:"mushroom",name:"どくキノコ",image:"./assets/enemies/enemy_mushroom.webp"}
+  {id:"slime",name:"アクアスライム",image:"./enemy_slime.webp"},
+  {id:"goblin",name:"森のゴブリン",image:"./enemy_goblin.webp"},
+  {id:"wolf",name:"シルバーウルフ",image:"./enemy_wolf.webp"},
+  {id:"bat",name:"ナイトバット",image:"./enemy_bat.webp"},
+  {id:"mushroom",name:"どくキノコ",image:"./enemy_mushroom.webp"}
 ];
-const SOUND_FILES={digit:"./assets/sounds/digit.mp3",confirm:"./assets/sounds/confirm.mp3"};
+const SOUND_FILES={digit:"./digit.mp3",confirm:"./confirm.mp3"};
 const SOUND_PROFILES={
   normalDigit:{attackGain:.10,bodyGain:.045,noiseGain:.035,attackHz:1050,bodyHz:420,duration:.052,noiseDuration:.025},
   normalConfirm:{attackGain:.18,bodyGain:.11,noiseGain:.07,attackHz:1250,bodyHz:340,duration:.085,noiseDuration:.045},
@@ -74,7 +74,7 @@ function renderTopEquipment(s){
   cards.push({part:"weapon",label:"武器",owned:true,count:1});
   PK.forEach((part,pi)=>{const count=s.gear[tier+"-"+pi]||0;cards.push({part,label:P[pi],owned:count>0,count})});
   $("equipOverlay").innerHTML=cards.map(c=>{
-    const src="./assets/equipment/eq_"+TK[tier]+"_"+c.part+".png";
+    const src="./eq_"+TK[tier]+"_"+c.part+".png";
     const count=c.part!=="weapon"&&c.count>1?` ×${c.count}`:"";
     return `<div class="eqCard ${c.owned?"owned":"missing"}"><div class="eqHead">${c.label}</div><div class="eqIconWrap"><img class="eqIcon" src="${src}" alt=""></div><div class="eqName">${eqName(tier,c.part)}${count}</div><div class="eqState ${c.owned?"":"missing"}">${c.owned?"所持中":"未入手"}</div></div>`;
   }).join("");
@@ -125,13 +125,13 @@ function showGear(){hide();$("gearbook").classList.remove("hide");if(globalThis.
     const tierMark=ti<s.tier?"✓ COMPLETE":ti===s.tier?"← 現在のランク":"未解放";
     z+=`<section class="gearTier ${tierUnlocked?"unlocked":"locked"}"><h3>${tierName}装備 <span>${tierMark}</span></h3><div class="geargrid">`;
 
-    const weaponSrc=`./assets/equipment/eq_${TK[ti]}_weapon.png`;
+    const weaponSrc=`./eq_${TK[ti]}_weapon.png`;
     z+=gearBookCard({label:"武器",name:W[ti],src:weaponSrc,owned:tierUnlocked,count:1,tierUnlocked});
 
     PK.forEach((part,pi)=>{
       const count=s.gear[ti+"-"+pi]||0;
       const owned=tierUnlocked&&count>0;
-      const src=`./assets/equipment/eq_${TK[ti]}_${part}.png`;
+      const src=`./eq_${TK[ti]}_${part}.png`;
       z+=gearBookCard({label:P[pi],name:eqName(ti,part),src,owned,count,tierUnlocked});
     });
     z+="</div></section>";
