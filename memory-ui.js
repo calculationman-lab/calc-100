@@ -1,4 +1,4 @@
-/* v28: local-only memorization mode. Existing calculation data stays in calcRPG. */
+/* v29: local-only memorization mode. Existing calculation data stays in calcRPG. */
 (function(){
   'use strict';
   const D=MemoryData,C=MemoryCore,el=id=>document.getElementById(id);
@@ -21,59 +21,51 @@
     release(){this.owned=false;if(unlock){const done=unlock;unlock=null;done();}}
   };
   const panels=`
-  <section id="memoryMenu" class="hide memPanel">
-    <header class="memHeader"><h1>3秒暗記トレーニング</h1><button id="memMenuHome" class="secondary">TOPへ戻る</button></header>
-    <p class="memIntro">ぱっと思い出して、4つから選ぼう。<br>1問3秒・1回20問。正解1問につき1 EXP！</p>
-    <label class="memLabel" for="memCourse">コース</label><select id="memCourse"></select>
-    <p id="memCourseInfo"></p><p id="memProgress"></p>
-    <div class="memActions"><button id="memStart">20問に挑戦</button><button id="memCards" class="secondary">覚えるカード</button></div>
-    <p class="memNote">途中でやめても練習記録は残ります。EXPは20問を終えたときにもらえます。<br>キーボードは1・2・3・4で回答できます。</p>
-    <details><summary>覚えた数・最近の暗記記録</summary><p>「覚えた」は4択での目安です。異なる3回の完了した挑戦で正解すると付きます。間違えたら練習中に戻ります。</p><div id="memHistory"></div></details>
-    <p id="memMenuError" role="alert"></p>
-  </section>
-  <section id="memoryPage" class="hide memPanel memPlay">
-    <header class="memHeader"><b>3秒暗記</b><span id="memNumber"></span><button id="memSound" class="secondary"></button><button id="memExit" class="secondary">TOPへ戻る</button></header>
-    <div id="memActive">
-      <div class="memTime"><span id="memSeconds">3.0秒</span><div class="memTrack"><div id="memBar"></div></div></div>
-      <div class="memQuestionArea"><p id="memHint"></p><h2 id="memQuestion"></h2></div>
-      <div id="memOptions" class="memOptions"></div>
-      <div id="memFeedback" class="memFeedback" role="status" aria-live="polite"></div>
-    </div>
-    <div id="memPaused" class="hide memPause"><h2>ひと休み中</h2><p>残り時間から続けます。</p><button id="memResume">再開する</button></div>
-    <div id="memSaveError" class="hide memPause" role="alert"><h2>保存できませんでした</h2><p>この回答・報酬はまだ保存されていません。保存を再試行してください。</p><p id="memSaveDetail"></p><button id="memSaveRetry">保存を再試行</button></div>
-  </section>
-  <section id="memoryResult" class="hide memPanel">
-    <header class="memHeader"><h1>暗記トレーニング完了！</h1></header>
-    <div class="memResultStats"><div>正解<strong id="memResultScore"></strong></div><div>時間切れ<strong id="memResultTimeout"></strong></div><div>獲得EXP<strong id="memResultXp"></strong></div></div>
-    <p id="memResultLevel"></p><h2>もう一度覚えよう</h2><div id="memMistakes"></div>
-    <div class="memActions"><button id="memAgain">もう一度20問</button><button id="memSelect" class="secondary">コースを選ぶ</button><button id="memResultHome" class="secondary">TOPへ戻る</button></div>
-  </section>
-  <section id="memoryCards" class="hide memPanel"><header class="memHeader"><h1>覚えるカード</h1><button id="memCardsBack" class="secondary">コースへ戻る</button></header><p>時間を気にせず、声に出して覚えよう。</p><div id="memCardList" class="memCardList"></div></section>`;
+<section id="memoryMenu" class="hide page browse-page memPanel">
+  <header class="page-header"><button id="memMenuHome" class="icon-button" aria-label="ホームへ"><svg><use href="#i-back"/></svg></button><h1>3秒暗記</h1><span></span></header>
+  <div class="memory-intro"><svg><use href="#i-book"/></svg><p>1問3秒・20問に挑戦</p></div>
+  <label class="memLabel" for="memCourse">コース</label><select id="memCourse"></select>
+  <div class="memory-start paper"><p id="memCourseInfo"></p><button id="memStart" class="primary wide"><svg><use href="#i-sword"/></svg>20問に挑戦<svg class="chevron"><use href="#i-next"/></svg></button><button id="memCards" class="apricot"><svg><use href="#i-brain"/></svg>覚えるカード<svg class="chevron"><use href="#i-next"/></svg></button></div>
+  <div class="memory-progress"><p id="memProgress"></p><div class="meter"><div id="memMasteredFill"></div></div></div>
+  <details class="disclosure"><summary>最近の暗記記録</summary><div id="memHistory"></div></details>
+  <details class="disclosure"><summary>覚えた数について</summary><p>異なる3回の完了した挑戦で正解すると「覚えた」の目安になります。間違い・時間切れで練習中に戻ります。</p><p>途中でやめても練習記録は残ります。EXPは20問を終えたときにもらえます。</p><p>キーボードは1・2・3・4で回答できます。</p></details><p id="memMenuError" class="error-message" role="alert"></p>
+</section>
+<section id="memoryPage" class="hide page memPanel memPlay">
+  <header class="page-header"><button id="memExit" class="icon-button" aria-label="ホームへ戻る"><svg><use href="#i-back"/></svg></button><h1>3秒暗記</h1><button id="memSound" class="icon-button"></button></header><div class="memory-meta"><strong id="memNumber"></strong></div>
+  <div id="memActive"><div class="memTime"><div class="memTrack"><div id="memBar"></div></div><span id="memSeconds">3.0秒</span></div><div class="memQuestionArea"><p id="memHint"></p><h2 id="memQuestion"></h2></div><div id="memOptions" class="memOptions"></div><div id="memFeedback" class="memFeedback" role="status" aria-live="polite"></div></div>
+  <div id="memPaused" class="hide pause-panel memPause"><img src="./assets/art/hero-rest.webp" alt="休んでいる冒険者"><h2>ひと休み中</h2><p>残り時間から続けます。</p><button id="memResume" class="primary"><svg><use href="#i-play"/></svg>再開する</button></div>
+  <div id="memSaveError" class="hide pause-panel memPause" role="alert"><svg class="error-icon"><use href="#i-book"/></svg><h2>保存できませんでした</h2><p>この回答・報酬はまだ保存されていません。<br>保存を再試行してください。</p><p id="memSaveDetail" class="subtle"></p><button id="memSaveRetry" class="primary">保存を再試行</button></div>
+</section>
+<section id="memoryResult" class="hide page memPanel memory-result">
+  <header class="page-header"><span></span><h1>暗記トレーニング完了</h1><span></span></header><div class="result-illustration"><img src="./assets/art/hero-celebrate.webp" alt="喜ぶ冒険者"></div><div class="memResultStats"><div class="stat-score"><span>正解</span><strong id="memResultScore"></strong></div><div class="stat-exp"><span>獲得EXP</span><strong id="memResultXp"></strong></div><div class="stat-timeout"><span>時間切れ</span><strong id="memResultTimeout"></strong></div></div><p id="memResultLevel" class="subtle"></p><h2 class="memory-mistakes-title">もう一度覚えよう</h2><div id="memMistakes"></div><div class="memActions"><button id="memAgain" class="primary">もう一度20問</button><button id="memSelect" class="apricot">コースを選ぶ</button><button id="memResultHome" class="text-button">ホームへ</button></div>
+</section>
+<section id="memoryCards" class="hide page memPanel memory-cards"><header class="page-header"><button id="memCardsBack" class="icon-button" aria-label="コースへ戻る"><svg><use href="#i-back"/></svg></button><h1>覚えるカード</h1><span></span></header><p class="centered">時間を気にせず、声に出して覚えよう。</p><div id="memCardList" class="memCardList"></div><button id="memCardsBottomBack" class="secondary wide">コースへ戻る</button></section>
+`;
   document.querySelector('main > .card').insertAdjacentHTML('beforeend',panels);
   const timer=new C.Deadline();let course='recommended',session=null,current=null,options=[],answers=[],frame=0,pending=null,questionToken=0,pointerToken=null;
   const fractionHTML=text=>String(text).replace(/(\d+)\/(\d+)/g,'<span class="memFraction"><span>$1</span><span>$2</span></span>');
   function read(){const raw=localStorage.getItem('calcRPG');const s=raw===null?state():JSON.parse(raw);if(!s||typeof s!=='object'||Array.isArray(s)||(s.xp!==undefined&&!Number.isFinite(s.xp)))throw Error('保存データを読み込めません。元の記録は変更していません。');const full={...state(),...s};if(full.xp===undefined)full.xp=0;C.memory(full);return full;}
   function write(transform){if(!guard.owned)throw Error('学習の保護が解除されました。');const next=transform(read());localStorage.setItem('calcRPG',JSON.stringify(next));return next;}
   function stop(){cancelAnimationFrame(frame);timer.stop();session=null;pending=null;pointerToken=null;}
-  globalThis.MemoryUI={stop};
-  function showPanel(id){hide();document.body.classList.remove('lock');el(id).classList.remove('hide');window.scrollTo(0,0);}
-  function soundLabel(){el('memSound').textContent=soundManager.enabled?'🔊 ON':'🔇 OFF';el('memSound').setAttribute('aria-pressed',String(soundManager.enabled));}
+  globalThis.MemoryUI={stop,pause,resume,openMenu,get active(){return Boolean(session);},get phase(){return timer.phase;}};
+  function showPanel(id){hide();document.body.classList.remove('lock');el(id).classList.remove('hide');window.scrollTo(0,0);if(globalThis.AppUI)AppUI.enter(id);}
+  function soundLabel(){el('memSound').textContent=soundManager.enabled?'🔊 ON':'🔇 OFF';el('memSound').setAttribute('aria-pressed',String(soundManager.enabled));if(globalThis.AppUI)AppUI.soundButton(el('memSound'));}
   function openMenu(){stop();guard.release();showPanel('memoryMenu');el('memMenuError').textContent='';try{updateCourse();}catch(e){el('memMenuError').textContent=e.message;el('memStart').disabled=true;}}
   function updateCourse(){
     course=el('memCourse').value;const m=C.memory(read()),list=C.pool(course,m),weak=C.weakIds(m),learned=D.questions.filter(q=>C.status(m.stats[q.id])==='覚えた').length;
     el('memCourseInfo').textContent=course==='weak'?`苦手 ${weak.length}問${weak.length?'・同じ分類の確認問題も出ます':'。ほかのコースから始めよう！'}`:`${list.length}問から20問を出題します。`;
     el('memStart').disabled=list.length===0;el('memCards').disabled=list.length===0;
-    el('memProgress').textContent=`覚えた ${learned} / 150問　暗記の挑戦数 ${m.attempts}問`;
-    el('memHistory').replaceChildren();
+    el('memProgress').textContent=`覚えた ${learned} / 150問`;el('memMasteredFill').style.width=(learned/150*100)+'%';
+    el('memHistory').replaceChildren();if(!m.history.length)el('memHistory').textContent='まだ記録はありません。';
     for(const h of m.history.slice(-8).reverse()){const p=document.createElement('p');p.textContent=`${new Date(h.at).toLocaleDateString('ja-JP')}　${C.courses[h.course]}　${h.correct}/20　+${h.xp} EXP`;el('memHistory').append(p);}
   }
   async function start(){
-    if(!await guard.acquire())return;
+    if(globalThis.AppUI&&AppUI.inputBlocked())return;if(!await guard.acquire())return;
     stop();course=el('memCourse').value;answers=[];
     session=crypto.randomUUID();
     try{if(!C.pool(course,C.memory(read())).length)throw Error('苦手は0件です。ほかのコースを選んでください。');write(s=>C.start(s,session,course));}
     catch(e){guard.release();session=null;el('memMenuError').textContent=e.message;return;}
-    showPanel('memoryPage');soundLabel();el('memSaveError').classList.add('hide');el('memExit').disabled=false;next();
+    showPanel('memoryPage');if(globalThis.AppUI)AppUI.requestPortraitLock();soundLabel();el('memSaveError').classList.add('hide');el('memExit').disabled=false;next();
   }
   function next(){
     cancelAnimationFrame(frame);
@@ -97,7 +89,7 @@
     frame=requestAnimationFrame(()=>{frame=requestAnimationFrame(()=>{
       if(timer.phase!=='preparing'||timer.token!==preparingToken)return;
       questionToken=timer.enter('question',3000);enableOptions(true);
-      if(document.hidden)pause();else pulse();
+      if(document.hidden||(globalThis.AppUI&&AppUI.isLandscape()))pause();else pulse();
     });});
   }
   function enableOptions(enabled){el('memOptions').querySelectorAll('button').forEach(b=>b.disabled=!enabled);}
@@ -112,6 +104,7 @@
     });
   }
   function answer(index,token){
+    if(globalThis.AppUI&&AppUI.inputBlocked())return;
     const resolution=timer.resolve(token);if(!resolution)return;
     cancelAnimationFrame(frame);enableOptions(false);
     const outcome=resolution==='timeout'||index===null?'timeout':D.equal(options[index],current.answer,current.unit)?'correct':'wrong';
@@ -121,7 +114,7 @@
       el('memFeedback').innerHTML=outcome==='correct'?'正解！':`${outcome==='timeout'?'時間切れ':'おしい！'}　${fractionHTML(current.correction)}`;
       try{soundManager.playConfirm();}catch(e){/* Audio is optional; timing and scoring remain independent. */}
       timer.enter('feedback',outcome==='correct'?300:2000);
-      if(document.hidden)pause();else pulse();
+      if(document.hidden||(globalThis.AppUI&&AppUI.isLandscape()))pause();else pulse();
     });
   }
   function persist(action,success){
@@ -134,8 +127,8 @@
     if(!timer.pause())return;
     cancelAnimationFrame(frame);enableOptions(false);el('memActive').classList.add('hide');el('memPaused').classList.remove('hide');
   }
-  function resume(){if(document.hidden||timer.phase!=='paused')return;timer.resume();questionToken=timer.token;pointerToken=null;el('memPaused').classList.add('hide');el('memActive').classList.remove('hide');enableOptions(timer.phase==='question');pulse();}
-  function exit(){if(pending)return;const wasPaused=timer.phase==='paused';pause();if(confirm('TOPへ戻りますか？\n練習記録は残りますが、途中終了ではEXPはもらえません。')){stop();guard.release();home();}else if(!wasPaused&&!document.hidden)resume();}
+  function resume(){if(document.hidden||(globalThis.AppUI&&AppUI.inputBlocked())||timer.phase!=='paused')return;timer.resume();questionToken=timer.token;pointerToken=null;el('memPaused').classList.add('hide');el('memActive').classList.remove('hide');enableOptions(timer.phase==='question');pulse();}
+  async function exit(){if(pending)return;const wasPaused=timer.phase==='paused';pause();const leave=globalThis.AppUI?await AppUI.confirmExit('memory'):confirm('TOPへ戻りますか？\n練習記録は残りますが、途中終了ではEXPはもらえません。');if(leave){stop();guard.release();home();}else if(!wasPaused&&!document.hidden)resume();}
   function showResult(){
     const m=C.memory(read()),h=m.history.find(x=>x.id===session);timer.stop();cancelAnimationFrame(frame);guard.release();showPanel('memoryResult');
     el('memResultScore').textContent=`${h.correct} / 20`;el('memResultTimeout').textContent=h.timeout+'問';el('memResultXp').textContent='+'+h.xp;
@@ -147,7 +140,7 @@
   el('memCourse').innerHTML=Object.entries(C.courses).map(([key,name])=>`<option value="${key}">${name}</option>`).join('');
   el('memoryHot').onclick=openMenu;el('memCourse').onchange=()=>{try{updateCourse();el('memMenuError').textContent='';}catch(e){el('memMenuError').textContent=e.message;}};
   el('memStart').onclick=start;el('memAgain').onclick=()=>{showPanel('memoryMenu');start();};el('memSelect').onclick=openMenu;
-  el('memMenuHome').onclick=home;el('memResultHome').onclick=home;el('memCardsBack').onclick=openMenu;el('memCards').onclick=cards;
+  el('memMenuHome').onclick=home;el('memResultHome').onclick=home;el('memCardsBack').onclick=openMenu;el('memCardsBottomBack').onclick=openMenu;el('memCards').onclick=cards;
   el('memExit').onclick=exit;el('memResume').onclick=resume;el('memSaveRetry').onclick=()=>{if(pending){const {action,success}=pending;persist(action,success);}};
   el('memSound').onclick=()=>{soundManager.toggle();soundLabel();renderSoundSetting();};
   document.addEventListener('keydown',event=>{if(!session||el('memoryPage').classList.contains('hide'))return;if(/^[1-4]$/.test(event.key)){event.preventDefault();if(!event.repeat)answer(Number(event.key)-1,questionToken);}});

@@ -1,0 +1,47 @@
+/* v30: approved B home composition. Artwork and interactive parts share one fitted map. */
+.home-page{padding:0 0 12px;min-height:0;background:url('./assets/art/home-foliage.webp') center/cover no-repeat;isolation:isolate}
+.home-header{height:clamp(64px,8.2dvh,89px);display:grid;grid-template-columns:54px minmax(0,1fr) 54px;gap:0;padding:0 22px;position:relative;z-index:2}
+.home-header .brand{grid-column:2;font-size:clamp(26px,4.8vw,45px);gap:4px;line-height:1.25;letter-spacing:-.055em;position:relative}
+.home-header .brand-mark{width:clamp(44px,8.8vw,78px);height:clamp(42px,7.4vw,68px)}
+.home-header .brand span{border:0;position:relative;padding-bottom:4px;-webkit-text-stroke:.35px currentColor}
+.home-header .brand span:after{content:"";position:absolute;height:9px;left:-18%;right:0;bottom:0;border-bottom:2px solid #609e70;border-radius:0 0 52% 36%;transform:rotate(.5deg)}
+.home-header>.icon-button{grid-column:3;width:48px;height:48px;color:#3b4b45}
+.home-header>.icon-button svg{fill:#3b4b45;stroke:var(--paper);stroke-width:1.7;width:35px;height:35px}
+.home-level{position:relative;z-index:1;height:36px;min-height:36px;font-size:clamp(16px,2.5vw,23px);gap:12px}
+.home-level>span:first-child b{font-size:1.48em}.home-level>span:last-child{font-size:.79em}.home-level small{font-size:.85em}
+.home-level .meter{width:22%;max-width:205px;height:14px}
+.adventure-map{margin:0;min-height:0;overflow:hidden;mask-image:linear-gradient(transparent 0,#000 5%,#000 92%,transparent 100%);position:relative;flex:1}
+.map-world{position:absolute;left:50%;top:50%;aspect-ratio:3/2;transform:translate(-50%,-50%);width:100%;height:auto}
+.island-art{width:100%;height:100%;object-fit:fill;-webkit-mask-image:linear-gradient(transparent,#000 10%,#000 93%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);mask-image:linear-gradient(transparent,#000 10%,#000 93%,transparent),linear-gradient(90deg,transparent,#000 5%,#000 95%,transparent);-webkit-mask-composite:source-in;mask-composite:intersect}
+.map-trail{position:absolute;inset:0;width:100%;height:100%;z-index:1;overflow:visible;fill:none;stroke:#8e7a5b;stroke-width:8;stroke-dasharray:1 25;stroke-linecap:round;filter:drop-shadow(0 2px 0 #fff0ba)}
+.map-trail path.done{stroke:#edb63a}
+.map-step{width:9.5%;aspect-ratio:1.42;border:0;border-radius:0;background:url('./assets/art/checkpoint-stone.webp') center/contain no-repeat;box-shadow:none;color:#fff;transform:translate(-50%,-48%);z-index:2}
+.step-0{left:21%;top:51%}.step-1{left:32%;top:58%}.step-2{left:52%;top:60%}
+.map-step.done,.map-step.upcoming,.map-step.current{background:url('./assets/art/checkpoint-stone.webp') center/contain no-repeat;border:0}
+.map-step>span{display:none}
+.map-step.done svg{position:absolute;top:13%;left:23%;width:54%;height:46%;border-radius:50%;background:linear-gradient(#75ad4b,#3d752e);padding:2px;border:1px solid #c4dfa0;stroke-width:3;box-shadow:0 2px 1px #2f5b3490}
+.map-step.current:before{content:"";position:absolute;top:15%;left:8%;width:84%;height:59%;border:3px solid #ffc84d;border-radius:50%;box-shadow:0 0 11px #ffe2809c,inset 0 1px #fff5b0;background:#ffd65355}
+.map-hero{width:18%;max-width:none;transform:translate(-50%,-85%);filter:drop-shadow(0 4px 2px #56503930);z-index:3}
+.map-boss{left:65%;top:31%;width:19%;height:18%;justify-content:flex-end}
+.map-boss:before{content:"";position:absolute;bottom:-5%;width:65%;height:25%;background:url('./assets/art/checkpoint-stone.webp') center/contain no-repeat;z-index:-1}
+.map-boss>img{width:84%;max-height:92%;filter:brightness(0) saturate(100%) invert(32%) sepia(12%) saturate(796%) hue-rotate(4deg) brightness(95%);opacity:.9}
+.map-boss.ready>img{filter:drop-shadow(0 3px 2px #51423355);opacity:1}
+.map-bubble{bottom:101%;min-width:102px;white-space:normal;border-radius:17px;padding:5px 12px 7px;font-size:clamp(13px,1.9vw,20px);line-height:1.15;background:linear-gradient(#fff7e5,#ffe2ae);border:2px solid #fffbef;outline:1px solid #edb269;box-shadow:0 3px 4px #8a5a1f22}
+.map-bubble>span,.map-bubble>strong{display:block}.map-bubble>span{margin-bottom:2px}.map-bubble b{color:#c56a2d;font-size:1.6em;vertical-align:-.06em}
+.map-bubble:after{display:none}#bossBtn{top:98%;min-height:44px;min-width:98px;font-size:clamp(13px,1.9vw,18px);padding:7px 12px;z-index:4}
+.home-actions{padding:0;flex:none;display:flex;align-items:center;flex-direction:column;position:relative;z-index:2}
+.quest-title{font-size:clamp(28px,4.7vw,51px);line-height:1.03;margin:0 0 12px;position:relative;white-space:nowrap;-webkit-text-stroke:.6px currentColor}
+.quest-title>span{font-size:1.85em;letter-spacing:-.06em;margin:0 5px 0 1px;padding:0;-webkit-text-stroke:0}
+.quest-title:before,.quest-title:after{content:"";position:absolute;width:26px;height:30px;top:35%;background:url('./assets/art/title-rays.svg') center/contain no-repeat;left:-37px}
+.quest-title:after{left:auto;right:-37px;transform:scaleX(-1)}
+.primary{background-image:radial-gradient(ellipse at 26% 18%,#90c57124,transparent 42%),radial-gradient(ellipse at 74% 75%,#164c332b,transparent 50%),url('./assets/art/button-grain.svg'),linear-gradient(145deg,#439d59,#267444);border-color:#3b8750;box-shadow:inset 0 2px 0 #d9e8b78a,inset 0 -4px 0 #16442b30,0 5px 1px #b8ad8526,0 8px 16px #8474381f}
+.start-button{width:56%;min-width:330px;max-width:580px;height:clamp(73px,10.5dvh,117px);min-height:0;border-radius:80px;border-width:3px;padding:12px 23px;gap:14px;font-size:clamp(22px,4.3vw,39px);font-weight:900;letter-spacing:.015em}
+.start-button>svg:first-child{width:clamp(38px,6.1vw,57px);height:clamp(38px,6.1vw,57px);fill:#fffef6;stroke:#fffef6;stroke-width:1.2;filter:drop-shadow(0 2px 1px #1b5937)}
+.start-button .chevron{width:25px!important;height:25px!important;margin-left:auto;stroke-width:3}
+.home-actions .daily-status{display:none}.home-actions .daily-status.complete{display:block;font-size:12px;min-height:0;margin:5px 0 -9px;line-height:1.2}
+.memory-entry{width:35%;min-width:235px;max-width:355px;margin:16px auto 0;min-height:clamp(48px,6.3dvh,69px);padding:8px 18px;font-size:clamp(21px,3.5vw,31px);gap:12px;border:2px solid #eea76e;box-shadow:inset 0 2px 0 #fff9,0 3px 0 #d697624a,0 6px 12px #9d763323;background:radial-gradient(ellipse at 38% 25%,#fff0,transparent 70%),url('./assets/art/button-grain.svg'),linear-gradient(135deg,#ffe3bc,#ffcb99)}
+.memory-entry>svg:first-child{width:clamp(32px,4.2vw,42px);height:clamp(32px,4.2vw,42px);color:#db7539;stroke-width:2.2}
+.entry-caption{font-size:clamp(14px,2.3vw,21px);font-weight:650;color:#34291f;margin-top:5px;line-height:1.35}
+@media(max-width:500px){.home-header{padding:0 10px;grid-template-columns:44px 1fr 44px;height:60px}.home-header .brand{font-size:25px;gap:2px}.home-header .brand-mark{width:40px;height:42px}.home-header>.icon-button{width:44px;height:44px}.home-header>.icon-button svg{width:28px;height:28px}.home-level{height:32px;min-height:32px;gap:8px}.home-level .meter{width:25%;height:11px}.home-page{padding-bottom:10px}.start-button{width:82%;min-width:0;font-size:24px;height:clamp(64px,9.5dvh,85px);padding:10px 20px;gap:10px}.quest-title{font-size:28px;margin-bottom:10px}.quest-title>span{font-size:1.65em}.quest-title:before,.quest-title:after{width:14px;height:18px;left:-24px}.quest-title:after{left:auto;right:-24px}.memory-entry{min-width:215px;width:55%;font-size:22px;margin-top:13px}.map-bubble{min-width:72px;padding:4px 7px 5px;border-radius:12px;font-size:12px}.map-boss{width:20%;left:64.5%}#bossBtn{font-size:12px;min-width:86px;padding:6px}.entry-caption{font-size:14px}}
+@media(max-height:900px) and (min-width:501px){.home-header{height:65px}.home-level{height:33px;min-height:33px}.quest-title{font-size:31px;margin-bottom:9px}.quest-title>span{font-size:1.72em}.start-button{height:79px;font-size:28px;min-width:350px}.memory-entry{min-height:52px;font-size:25px;margin-top:13px}.entry-caption{font-size:17px}.map-bubble{font-size:14px;min-width:94px}}
+@media(max-height:700px){.home-header{height:55px}.home-level{height:29px;min-height:29px}.quest-title{font-size:24px;margin-bottom:7px}.start-button{height:59px;font-size:22px}.memory-entry{min-height:45px;margin-top:10px;font-size:20px}.entry-caption{font-size:12px}.home-page{padding-bottom:8px}}
