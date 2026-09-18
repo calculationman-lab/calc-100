@@ -373,7 +373,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
 @media(max-width:900px){#gearbook .geargrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:600px){#gearbook .gearTier{padding:9px}#gearbook .geargrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#gearbook .gear{min-height:185px}#gearbook .gearImageWrap{height:88px}#gearbook .gearImage{width:78px;height:78px}#gearbook .gearName{font-size:12px}}
 
-</style></head><body><main><section class="card">
+</style><link rel="stylesheet" href="./memory.css"><script defer src="./memory-data.js"></script><script defer src="./memory-core.js"></script><script defer src="./memory-ui.js"></script></head><body><main><section class="card">
 <div id="home"><div class="rpgHome">
   <div class="rpgGrid">
     <section class="rpgPanel heroPanel" aria-labelledby="gameTitle">
@@ -389,7 +389,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
     <section class="rpgPanel" aria-labelledby="equipTitle"><h2 class="panelTitle" id="equipTitle">🛡 現在の装備</h2><div class="equipGrid" id="equipOverlay"></div><div class="completeValue" id="completeValue"></div></section>
   </div>
   <button class="startButton startQuest" id="startHot">⚔ 今日の100問をはじめる！ <span aria-hidden="true">›</span></button>
-  <nav class="menuGrid topMenuGrid" aria-label="冒険メニュー"><button class="menuButton" id="historyHot">📜 過去の記録</button><button class="menuButton" id="gearHot">📖 装備図鑑</button><button class="menuButton" id="bossBookHot">👾 ボス図鑑</button><button class="menuButton" id="rulesHot">❔ 遊び方 / ルール</button><button class="menuButton" id="soundToggle" aria-pressed="true">🔊 操作音 ON</button></nav>
+  <button id="memoryHot">✨ 3秒暗記トレーニング</button><nav class="menuGrid topMenuGrid" aria-label="冒険メニュー"><button class="menuButton" id="historyHot">📜 過去の記録</button><button class="menuButton" id="gearHot">📖 装備図鑑</button><button class="menuButton" id="bossBookHot">👾 ボス図鑑</button><button class="menuButton" id="rulesHot">❔ 遊び方 / ルール</button><button class="menuButton" id="soundToggle" aria-pressed="true">🔊 操作音 ON</button></nav>
   <div class="widePanels"><section class="rpgPanel infoPanel"><h2 class="panelTitle">👾 ボスについて</h2><div class="bossSummary"><img id="bossImage" class="bossArt" alt=""><div><p><b id="bossName"></b></p><p>通常100問を3回クリアすると出現。</p><p>20問すべて一発正解で撃破！</p><p class="bossReady" id="bossSummary"></p><p id="bossWins"></p></div></div><button id="bossBtn" class="hide bossAction">ボスに挑戦する</button></section>
   <section class="rpgPanel infoPanel"><h2 class="panelTitle">👑 最近の記録</h2><div class="recentOverlay" id="recentOverlay"></div></section></div>
   <footer id="appVersion" class="appVersion"></footer>
@@ -427,7 +427,7 @@ button{width:100%;border:0;border-radius:7px;padding:14px;margin-top:10px;backgr
   <button class="secondary back">トップへ戻る</button>
 </div>
 </section></main><script>
-const APP_VERSION="v27";
+const APP_VERSION="v28";
 const $=x=>document.getElementById(x),T=["革","石","鉄","ダイヤ","ネザライト"],TK=["leather","stone","iron","diamond","nether"],P=["頭","胴","脚","足"],PK=["head","body","legs","feet"],W=["木の剣","石の剣","鉄の剣","ダイヤの剣","ネザライトの剣"];
 const BOSSES=[
   {id:"starter_dragon",tier:0,name:"はじまりの竜",image:"./assets/bosses/boss_leather.webp"},
@@ -481,7 +481,7 @@ function state(){const base={xp:0,clears:0,boss:false,tier:0,gear:{},hist:[],dat
 function save(s){localStorage.setItem("calcRPG",JSON.stringify(s))}
 function sh(a){for(let j=a.length-1;j;j--){let k=Math.floor(Math.random()*(j+1));[a[j],a[k]]=[a[k],a[j]]}return a}
 function gen(n){let a=[],u=new Set(),p=Math.ceil(n/2);while(a.length<p){let x=10+Math.floor(Math.random()*90),y=10+Math.floor(Math.random()*90),k=`+${x},${y}`;if(!u.has(k)){u.add(k);a.push({x,y,o:"+",a:x+y})}}while(a.length<n){let x=10+Math.floor(Math.random()*90),y=10+Math.floor(Math.random()*90);if(y>x)[x,y]=[y,x];let k=`-${x},${y}`;if(!u.has(k)){u.add(k);a.push({x,y,o:"−",a:x-y})}}return sh(a)}
-function hide(){["home","quiz","result","history","gearbook","bossbook","rulesPage"].forEach(x=>$(x).classList.add("hide"))}
+function hide(){["home","quiz","result","history","gearbook","bossbook","rulesPage","memoryMenu","memoryPage","memoryResult","memoryCards"].forEach(x=>{if($(x))$(x).classList.add("hide")})}
 function fmt(ms){let s=Math.floor(ms/1000);return Math.floor(s/60)+"分"+String(s%60).padStart(2,"0")+"秒"}
 function streak(s){let ds=[...new Set(s.dates)].sort().reverse();if(!ds.length)return 0;let cur=new Date(ds[0]+"T12:00:00"),n=1;for(let j=1;j<ds.length;j++){let d=new Date(ds[j]+"T12:00:00"),dif=Math.round((cur-d)/86400000);if(dif===1){n++;cur=d}else break}return n}
 function bonusStreak(s,date=new Date()){let ds=[...new Set(s.dates)].sort().reverse();if(!ds.length)return 1;const latest=new Date(ds[0]+"T12:00:00"),today=new Date(dk(date)+"T12:00:00"),gap=Math.round((today-latest)/86400000),current=streak(s);return gap===0?current:gap===1?current+1:1}
@@ -518,7 +518,7 @@ function renderRecent(s){
   }).join("");
 }
 
-function home(){document.body.classList.remove("lock");hide();$("home").classList.remove("hide");
+function home(){if(globalThis.MemoryUI)MemoryUI.stop();if(globalThis.LearningGuard)LearningGuard.release();document.body.classList.remove("lock");hide();$("home").classList.remove("hide");
   let s=state(),level=levelInfo(s.xp),lv=level.level,x=level.current,st=bonusStreak(s),daily=todayNormal(s),currentBoss=bossForTier(s.tier);
   $("lvLive").textContent=lv;
   $("xpLive").textContent=x+" / 300";
@@ -536,7 +536,7 @@ function home(){document.body.classList.remove("lock");hide();$("home").classLis
   renderTopEquipment(s);renderRecent(s);renderSoundSetting();
   $("bossBtn").classList.toggle("hide",!s.boss)
 }
-function startSession(questions,k){kind=k;qs=sh(questions.slice());i=0;w=[];v="";activeEnemy=chooseEnemy(k);hide();$("quiz").classList.remove("hide");document.body.classList.add("lock");$("mode").textContent=k==="boss"?"BOSS":k==="review"?"復習":"通常";battleFeedback(false);t0=Date.now();$("timer").textContent=fmt(0);clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmt(Date.now()-t0),500);show()}
+function startSession(questions,k){if(globalThis.LearningGuard&&!LearningGuard.owned){LearningGuard.acquire().then(ok=>{if(ok)startSession(questions,k)});return;}kind=k;qs=sh(questions.slice());i=0;w=[];v="";activeEnemy=chooseEnemy(k);hide();$("quiz").classList.remove("hide");document.body.classList.add("lock");$("mode").textContent=k==="boss"?"BOSS":k==="review"?"復習":"通常";battleFeedback(false);t0=Date.now();$("timer").textContent=fmt(0);clearInterval(tick);tick=setInterval(()=>$("timer").textContent=fmt(Date.now()-t0),500);show()}
 function begin(n,k){if(k==="boss")activeBoss={...bossForTier(state().tier)};startSession(gen(n),k)}
 function show(){renderBattleHud();if(i>=qs.length)return finish();let q=qs[i];$("prog").textContent=(i+1)+" / "+qs.length+"問";$("prob").textContent=q.x+" "+q.o+" "+q.y+" = ?";v="";$("disp").textContent="　"}
 function key(k){if(k==="B"){soundManager.playBackspace();v=v.slice(0,-1)}else if(k==="E"){if(v==="")return;soundManager.playConfirm(soundMode());battleFeedback(true);let q=qs[i];if(+v!==q.a)w.push({...q,g:v});i++;return show()}else{if(v.length<3)v+=k}$("disp").textContent=v||"　"}
@@ -544,7 +544,7 @@ function finish(now=new Date()){clearInterval(tick);document.body.classList.remo
  if(kind==="normal"){s.total+=qs.length;const date=dk(now);if(!s.dates.includes(date))s.dates.push(date);let st=streak(s),bonus=streakBonus(st),gain=normalGain(score,st);earnedXp=gain;streakExtra=bonus;s.xp+=gain;s.clears++;if(s.clears%3===0)s.boss=true;s.hist.push({date,at:now.toISOString(),kind:"normal",score,total:100,time:tm,xp:gain})}
  else if(kind==="review"){s.total+=qs.length;$("rinfo").textContent+="　復習完了（EXP・クリア回数・ボス進行への加算なし）"}
  else if(kind==="boss"&&score===20){const defeated=activeBoss||bossForTier(s.tier),tier=defeated.tier;s.boss=false;s.total+=qs.length;earnedXp=100;s.xp+=100;s.bossWins[defeated.id]=(s.bossWins[defeated.id]||0)+1;let part=Math.floor(Math.random()*4),key=tier+"-"+part;s.gear[key]=(s.gear[key]||0)+1;let complete=P.every((_,p)=>s.gear[tier+"-"+p]>0),msg=defeated.name+" 撃破！　"+T[tier]+"の"+P[part]+"装備 GET！";$("rtitle").textContent=defeated.name+" 撃破！";if(complete&&tier<4){s.tier=tier+1;const next=bossForTier(s.tier);msg+="　"+T[tier]+"装備 COMPLETE！　新ランク："+T[s.tier]+"　新しい武器："+W[s.tier]+"　次のボス："+next.name}else if(complete&&tier===4)msg+="　最高ランク COMPLETE！";$("loot").textContent=msg;$("loot").classList.remove("hide");s.hist.push({date:dk(now),at:now.toISOString(),kind:"boss",score:20,total:20,time:tm,bossId:defeated.id,bossName:defeated.name,tier})}
- else if(kind==="boss"){$("loot").textContent="ボスに逃げられた！ 20問すべて一発正解でもう一度挑戦！";$("loot").classList.remove("hide")}save(s);const level=levelInfo(s.xp);$("resultXp").textContent="+"+earnedXp+" EXP";$("resultBonus").textContent=streakExtra?"連続ボーナス：+"+streakExtra+" EXP":kind==="review"?"復習ではEXPは増えません":"";$("resultLevel").textContent="冒険者レベル　Lv. "+level.level+"（EXP "+level.current+" / 300）";$("resultRank").textContent="現在の装備ランク　"+T[s.tier]}
+ else if(kind==="boss"){$("loot").textContent="ボスに逃げられた！ 20問すべて一発正解でもう一度挑戦！";$("loot").classList.remove("hide")}save(s);if(globalThis.LearningGuard)LearningGuard.release();const level=levelInfo(s.xp);$("resultXp").textContent="+"+earnedXp+" EXP";$("resultBonus").textContent=streakExtra?"連続ボーナス：+"+streakExtra+" EXP":kind==="review"?"復習ではEXPは増えません":"";$("resultLevel").textContent="冒険者レベル　Lv. "+level.level+"（EXP "+level.current+" / 300）";$("resultRank").textContent="現在の装備ランク　"+T[s.tier]}
 function showHist(){hide();$("history").classList.remove("hide");let a=state().hist.slice().reverse();$("hist").innerHTML=a.length?"":"記録はまだありません。";a.forEach(x=>{const date=x&&x.date||"日付不明",score=Number.isFinite(x&&x.score)?x.score:"-",total=Number.isFinite(x&&x.total)?x.total:"-",time=Number.isFinite(x&&x.time)?fmt(x.time):"時間不明",label=x&&x.kind==="boss"?(x.bossName||"BOSS"):"通常";$("hist").innerHTML+=`<div class=row><span>${date} ${label}</span><b>${score}/${total}　${time}</b></div>`})}
 function showBossBook(){hide();$("bossbook").classList.remove("hide");const s=state();$("bossCatalog").innerHTML=BOSSES.map(b=>{const unlocked=b.tier<=s.tier,current=b.tier===s.tier,name=unlocked?b.name:"？？？",status=current?"現在のボス":b.tier<s.tier?"解放済み":"未解放";return `<article class="bossBookEntry ${current?"current":""} ${unlocked?"":"future"}"><img src="${b.image}" alt="${unlocked?b.name:"未解放のボス"}"><h2>${name}</h2><p>${T[b.tier]}ランク</p><p><b>${status}</b></p><p>討伐数：${unlocked?s.bossWins[b.id]:"－"}体</p></article>`}).join("")}
 function showGear(){hide();$("gearbook").classList.remove("hide");let s=state(),z="";
@@ -577,3 +577,4 @@ $("quizBack").onclick=()=>{if(confirm("途中の計算結果は記録されま�
 $("bossBookHot").onclick=showBossBook;
 $("appVersion").textContent="100問計算RPG "+APP_VERSION;const toggleSound=()=>{soundManager.toggle();renderSoundSetting()};$("soundToggle").onclick=toggleSound;$("quizSoundToggle").onclick=toggleSound;$("resultHistory").onclick=showHist;$("rulesHot").onclick=()=>{hide();$("rulesPage").classList.remove("hide")};document.querySelectorAll(".back").forEach(b=>b.onclick=home);home();if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
 </script></body></html>
+
